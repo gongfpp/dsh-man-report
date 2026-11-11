@@ -587,10 +587,13 @@
     "unit-yuan": {
       "file": "clips/unit-yuan.wav",
       "text": "元。",
-      "sha256": "adf77cd0b5e562eec18df4c9d9cb0139feccc040914b36d9a4d279d03d1dc534",
-      "duration": 0.72,
+      "sha256": "3aafaeebdb0070cdb27925a55cb57e5ec38b04ac53a53d7344aa4c2458617496",
+      "duration": 0.63,
       "asrVerified": false,
-      "humanListeningVerified": false
+      "humanListeningVerified": true,
+      "humanPreference": "B selected in CNY 0.31 round-next audition on 2026-11-11; unit pronunciation only, not blanket approval of all amounts or templates",
+      "source": "doubao-yuan-fix/yuan-context",
+      "sourceRangeSeconds": [1.815, 2.445]
     },
     "unit-dollars": {
       "file": "clips/unit-dollars.wav",

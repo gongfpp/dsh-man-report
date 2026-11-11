@@ -1,6 +1,6 @@
 {
   "name": "dsh-man-031",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "icon": "icon.png",
   "description": "A Kobe iced-tea turn reminder with cost-meter-first pricing, public-price fallback, token-only reporting and bundled offline audio.",
   "type": "module",

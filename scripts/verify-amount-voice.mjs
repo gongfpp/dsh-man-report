@@ -15,6 +15,11 @@ for(const row of [...Object.values(manifest.clips),...Object.values(manifest.amo
   assert.equal(b.toString('ascii',0,4),'RIFF');assert.equal(b.toString('ascii',8,12),'WAVE')
 }
 assert.equal(manifest.amounts['CNY:0.31'].sha256,'616c0da0c19a87c82f8531cc8ee2aea1da87c2eb24c9506b72dfed44d9f4c1a2')
+assert.equal(manifest.units.CNY,'unit-yuan')
+assert.equal(manifest.clips['unit-yuan'].sha256,'3aafaeebdb0070cdb27925a55cb57e5ec38b04ac53a53d7344aa4c2458617496')
+assert.equal(manifest.clips['unit-yuan'].duration,.63)
+assert.equal(manifest.clips['unit-yuan'].humanListeningVerified,true)
+assert.equal(manifest.clips['unit-yuan'].asrVerified,false)
 let api
 const window={test:v=>api=v,__ModuleLoader__:{load:({factory})=>factory(()=>({}))}}
 const client=readFileSync(new URL('../client.js',import.meta.url),'utf8')
@@ -24,6 +29,8 @@ for(const p of manifest.phrases)for(const currency of ['CNY','USD'])for(const am
   const files=Array.from(api.getAudioPlan(manifest,amount,currency,undefined,p.id))
   assert.ok(files[0].endsWith(manifest.clips[p.prefix].file));if(p.suffix)assert.ok(files.at(-1).endsWith(manifest.clips[p.suffix].file))
   assert.ok(!files.some(path=>path.includes('/amounts/')),'a different whole sentence must never replace a selected template')
+  const unitKey=currency==='CNY'?manifest.units.CNY:api.billingAmount(amount)==='1.000'?manifest.units.USD_SINGULAR:manifest.units.USD
+  assert.equal(files.filter(path=>path.endsWith('/'+manifest.clips[unitKey].file)).length,1)
 }
 assert.equal(manifest.tokenPhrases.length,4)
 for(const phrase of manifest.tokenPhrases)for(const amount of [0,1,1234,999999999999]){
