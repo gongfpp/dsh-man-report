@@ -66,11 +66,18 @@ assert.ok((await image.arrayBuffer()).byteLength > 500)
 assert.equal(routes.has('/api/man-031/man-031.mp3'), false, 'no misleading generic fixed-amount TTS')
 const manifest = await (await routes.get('/api/man-031/voices/manifest.json').fetch()).json()
 assert.equal(manifest.schemaVersion, 1)
-for (const clip of [...Object.values(manifest.clips), ...Object.values(manifest.amounts)]) {
-  const res = await routes.get(`/api/man-031/voices/${clip.file}`).fetch()
+const tierRows = Object.values(manifest.tierOverrides ?? {}).flatMap(tier => Object.values(tier ?? {}))
+assert.ok(tierRows.length > 0, 'tier overrides must be served, not only the default set')
+for (const clip of [...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows]) {
+  const route = routes.get(`/api/man-031/voices/${clip.file}`)
+  assert.ok(route, `tier asset route missing: ${clip.file}`)
+  const res = await route.fetch()
+  assert.equal(res.status, 200)
   assert.equal(res.headers.get('content-type'), clip.file.endsWith('.wav') ? 'audio/wav' : 'audio/mpeg')
   assert.ok((await res.arrayBuffer()).byteLength > 100)
 }
+const voiceRoutes = [...routes.keys()].filter(path => path.startsWith('/api/man-031/voices/'))
+assert.equal(voiceRoutes.length, new Set([...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows].map(clip => clip.file)).size + 1, 'manifest plus every declared clip, nothing else')
 const cost = async query => routes.get('/api/man-031/cost').fetch(new Request(`https://local/api/man-031/cost?${query}`))
 const query = 'sessionId=test-session&endSeq=7&currency='
 const cny = await cost(query + 'CNY'); assert.equal(cny.headers.get('cache-control'), 'no-store')

@@ -74,8 +74,9 @@ export async function apply(ctx) {
   try { manifest = JSON.parse(await readFile(new URL('./assets/voices/manifest.json', import.meta.url), 'utf8')) }
   catch (error) { if (error.code !== 'ENOENT') throw error }
   if (manifest.schemaVersion !== 1 || !manifest.clips || !manifest.amounts) throw new Error('Invalid man-031 voice manifest')
-  const paths = new Set([...Object.values(manifest.clips), ...Object.values(manifest.amounts)].map(clip => clip.file))
-  if (paths.size > 256) throw new Error('Too many man-031 voice assets')
+  const tierRows = Object.values(manifest.tierOverrides ?? {}).flatMap(tier => Object.values(tier ?? {}))
+  const paths = new Set([...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows].map(clip => clip.file))
+  if (paths.size > 512) throw new Error('Too many man-031 voice assets')
   let totalBytes = 0
   for (const file of paths) {
     if (!audioPath(file)) throw new Error('Invalid man-031 voice asset path')

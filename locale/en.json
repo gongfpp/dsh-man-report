@@ -1,1 +1,6 @@
-{"meta":{"title":"Man! That much money!","description":"An iced-tea portrait reports this turn's cost or token count using bundled offline audio. Prefers cost-meter, with a clearly labeled public-price fallback. CNY/USD supported; no speech API key needed."}}
+{
+  "meta": {
+    "title": "Man! That much money!",
+    "description": "Pops in after each turn and speaks the cost or token count offline, with four emotion tiers by amount. Uses cost-meter first, public prices as a labelled fallback; no voice key required."
+  }
+}

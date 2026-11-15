@@ -1,8 +1,8 @@
 {
   "name": "dsh-man-031",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "icon": "icon.png",
-  "description": "A Kobe iced-tea turn reminder with cost-meter-first pricing, public-price fallback, token-only reporting and bundled offline audio.",
+  "description": "A Kobe iced-tea turn reminder with cost-meter-first pricing, public-price fallback, token-only reporting, four emotion tiers and bundled offline audio.",
   "type": "module",
   "license": "MIT",
   "author": "gongfpp",
@@ -72,6 +72,7 @@
     "docs/PRICING-LICENSE.txt",
     "assets/voices/manifest.json",
     "assets/voices/readable-text.txt",
+    "assets/voices/clips/*.mp3",
     "assets/voices/clips/*.wav",
     "assets/voices/amounts/CNY-0.31.wav",
     "docs/preview.png",

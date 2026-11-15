@@ -72,6 +72,24 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
     if (fraction) result.push('dot', ...fraction)
     return result
   }
+  // Emotion tier follows the size of the round: bigger spend, brighter delivery.
+  function voiceTier(manifest, amount, mode = 'money') {
+    const value = mode === 'tokens' ? amount : Number(billingAmount(amount))
+    const bands = mode === 'tokens' ? manifest?.tierBands?.tokens : manifest?.tierBands?.money
+    if (!Array.isArray(bands) || !bands.length) return null
+    for (const band of bands) {
+      if (typeof band?.tier !== 'string') continue
+      if (band.below === undefined || (Number.isFinite(band.below) && value < band.below)) return band.tier
+    }
+    return null
+  }
+  function clipFor(manifest, key, tier) {
+    const base = manifest.clips?.[key]
+    if (!base) return undefined
+    // Tier 2 is the default set; the other tiers carry measured overrides.
+    const override = tier && tier !== 't2' ? manifest.tierOverrides?.[tier]?.[key] : undefined
+    return override ? { ...base, ...override } : base
+  }
   // Manifest adapter: no speech synthesis and no guessed clip names.
   function getAudioPlan(manifest, amount, currency, openerKey, phraseId, mode = 'money') {
     if (mode === 'tokens') {
@@ -98,7 +116,8 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
       const unit = manifest.units ? (currency === 'USD' ? (billingAmount(amount) === '1.000' ? manifest.units.USD_SINGULAR : manifest.units.USD) : manifest.units.CNY) : currency === 'USD' ? (billingAmount(amount) === '1.000' && manifest.clips?.['singular-dollar'] ? 'singular-dollar' : manifest.clips?.dollars ? 'dollars' : 'dollar') : 'yuan'
       const keys = [phrase?.prefix ?? 'prefix', ...numberTokens(amount), unit]
       if (phrase?.suffix !== undefined) keys.push(phrase.suffix)
-      clips = keys.map(key => manifest.clips?.[key])
+      const tier = voiceTier(manifest, amount, mode)
+      clips = keys.map(key => clipFor(manifest, key, tier))
     }
     if (exact?.fullUtterance !== true && Array.isArray(manifest.openers) && manifest.openers.length) {
       // A full utterance already contains MAN; legacy bodies still use a separate opener.

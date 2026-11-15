@@ -12,6 +12,9 @@ for (const [token] of code.matchAll(/--dsw-[a-z0-9-]+/g)) assert.ok(themeTokens.
 assert.doesNotMatch(code, /#282033|#756987|scaleX\(-1\)/, 'no dark-only surface fallback or mirrored packaging')
 assert.match(code, /\.man031-close,\.man031-retry\{min-width:44px;min-height:44px\}/, 'mobile interactive targets remain accessible')
 const deferred = () => { let resolve; const promise = new Promise(r => { resolve = r }); return { promise, resolve } }
+// Independent tier lookup so the client's own helper is not the only oracle.
+const tierOf = (value, bands) => { for (const band of bands) if (band.below === undefined || value < band.below) return band.tier }
+const clipFile = (pack, key, tier) => tier === 't2' ? pack.clips[key].file : pack.tierOverrides[tier][key].file
 const store = initial => {
   let value = initial
   const listeners = new Set()
@@ -103,7 +106,8 @@ for (const count of [0, 1, 1234]) {
   await f.event(2)
   assert.match(f.requests.find(p=>p.startsWith('/api/man-031/cost?')), /mode=tokens/)
   assert.ok(f.text().includes(`本轮用了 ${count.toLocaleString('en-US')} 个 Token`));assert.doesNotMatch(f.text(), /本轮约花了|美元|元/)
-  const unit=pack.clips[count===1?'unit-token':'unit-tokens'].file
+  const tier=tierOf(count,pack.tierBands.tokens)
+  const unit=clipFile(pack,count===1?'unit-token':'unit-tokens',tier)
   assert.ok(f.requests.some(p=>p.endsWith(unit)));assert.ok(!f.requests.some(p=>/unit-(yuan|dollar)/.test(p)))
   await f.openSettings();assert.equal(f.root.root.findAllByProps({className:'man031-currency'}).length,0)
   assert.equal(f.root.root.findByProps({className:'man031-preview-phrase'}).findAllByType('option').length,5)
@@ -113,8 +117,8 @@ for (const count of [0, 1, 1234]) {
     await act(async()=>f.root.root.findByProps({className:'man031-preview-phrase'}).props.onChange({target:{value:phrase.id}}))
     const before=f.requests.length
     await act(async()=>f.root.root.findByProps({className:'man031 man031-settings'}).findByType('button').props.onClick());await flush()
-    const paths=f.requests.slice(before).filter(p=>p.endsWith('.wav'))
-    assert.ok(paths[0].endsWith(pack.clips[phrase.prefix].file));assert.ok(paths.some(p=>p.endsWith(pack.clips['unit-tokens'].file)))
+    const paths=f.requests.slice(before).filter(p=>p.endsWith('.mp3'))
+    assert.ok(paths[0].endsWith(clipFile(pack,phrase.prefix,'t2')));assert.ok(paths.some(p=>p.endsWith(clipFile(pack,'unit-tokens','t2'))))
     assert.match(f.text(),/本轮用了 2,345 个 Token/)
   }
   await f.openSettings(false);await f.openSettings();assert.equal(JSON.parse(storage.get('man-031.preferences.v2')).reportMode,'tokens')
@@ -169,7 +173,7 @@ for (let i = 0; i < 20; i++) {
   await act(async () => select.props.onChange({ target: { value: phrase.id } }))
   const before = f.requests.length
   await act(async () => f.root.root.findByProps({ className: 'man031 man031-settings' }).findByType('button').props.onClick()); await flush()
-  assert.deepEqual(f.requests.slice(before).filter(path => path.endsWith('.wav')).map(path => path.split('/').at(-1)), [phrase.prefix,'0','dot','3','1','1',pack.units.CNY,...(phrase.suffix ? [phrase.suffix] : [])].map(key => pack.clips[key].file.split('/').at(-1)))
+  assert.deepEqual(f.requests.slice(before).filter(path => path.endsWith('.mp3')).map(path => path.split('/').at(-1)), [phrase.prefix,'0','dot','3','1','1',pack.units.CNY,...(phrase.suffix ? [phrase.suffix] : [])].map(key => clipFile(pack,key,tierOf(.311,pack.tierBands.money)).split('/').at(-1)))
   assert.match(f.text(), /0.311元/); assert.equal(rolls, 0)
   await f.unmount()
 }
@@ -182,12 +186,12 @@ for (let i = 0; i < 20; i++) {
   assert.match(f.text(), /音频网络失败/); assert.equal(rolls, 1)
   await f.click('man031-retry')
   assert.equal(rolls, 1, 'Retry cannot replace the selected twentieth phrase')
-  assert.ok(f.requests.some(path => path.endsWith('/line-clock.wav')))
+  assert.ok(f.requests.some(path => path.endsWith('/line-clock-t1.mp3')))
   assert.match(f.text(), /0.001元/)
   const before = f.requests.length
   await f.event(4)
   assert.equal(rolls, 2)
-  assert.ok(f.requests.slice(before).some(path => path.endsWith('/line-next-play.wav')), 'new round can select the eleventh phrase')
+  assert.ok(f.requests.slice(before).some(path => path.endsWith('/line-next-play-t1.mp3')), 'new round can select the eleventh phrase')
   assert.ok(f.requests.every(path => path.startsWith('/api/man-031/')), 'all twenty phrases remain local')
   await f.unmount()
 }
@@ -213,7 +217,7 @@ for (let i = 0; i < 20; i++) {
   const before = f.requests.length
   await act(async () => button().props.onClick()); await flush()
   assert.match(f.text(), /1.270美元/)
-  assert.deepEqual(f.requests.slice(before).filter(path => path.endsWith('.wav')).map(path => path.split('/').at(-1)), ['prefix.wav','1.wav','dot.wav','2.wav','7.wav','unit-dollars.wav','line-next.wav'])
+  assert.deepEqual(f.requests.slice(before).filter(path => path.endsWith('.mp3')).map(path => path.split('/').at(-1)), ['prefix','1','dot','2','7','unit-dollars','line-next'].map(key => clipFile(pack,key,'t3').split('/').at(-1)))
   await f.previewAmount('0'); await act(async () => button().props.onClick()); await flush()
   assert.match(f.text(), /约花了0.000美元/)
   assert.equal(f.storage.has('man-031.seen.v2'), false)
@@ -247,8 +251,8 @@ for (let i = 0; i < 20; i++) {
     const f = await fixture({ amount: .31, manifest: pack })
     await f.event(2)
     assert.equal(f.playing, 7, 'published pack uses the selected template, never an unrelated whole sentence')
-    assert.equal(f.requests.filter(url => url.endsWith('.wav')).length, 7)
-    assert.equal(f.requests.some(url => url.endsWith('.mp3')), false, 'no legacy MiMo or static MAN mixing')
+    assert.equal(f.requests.filter(url => url.endsWith('.mp3')).length, 7)
+    assert.equal(f.requests.some(url => url.endsWith('.wav')), false, 'the tiered bank is fully local MP3, no legacy MiMo or static MAN mixing')
     await f.unmount()
   }
 }
