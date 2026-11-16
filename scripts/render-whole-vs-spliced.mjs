@@ -14,10 +14,18 @@ const rate = 24000
 const toF32 = bytes => execFileSync('ffmpeg', ['-v', 'error', '-i', 'pipe:0', '-f', 'f32le', '-ac', '1', '-ar', String(rate), 'pipe:1'], { input: bytes, maxBuffer: 1 << 26 })
 const toWav = raw => {
   const tmp = fileURLToPath(new URL('../dev/voice-bank-v2/audition/.raw.f32', import.meta.url))
+  const tmpWav = fileURLToPath(new URL('../dev/voice-bank-v2/audition/.raw.wav', import.meta.url))
   writeFileSync(tmp, raw)
-  const wav = execFileSync('ffmpeg', ['-v', 'error', '-f', 'f32le', '-ar', String(rate), '-ac', '1', '-i', tmp, '-c:a', 'pcm_s16le', '-f', 'wav', 'pipe:1'], { maxBuffer: 1 << 26 })
-  rmSync(tmp, { force: true })
-  return wav
+  try {
+    // Encode to a real file: ffmpeg can only patch the RIFF/data sizes when the
+    // output is seekable. Writing WAV to a pipe leaves 0xFFFFFFFF sizes, which
+    // strict players such as PotPlayer refuse to open.
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'f32le', '-ar', String(rate), '-ac', '1', '-i', tmp, '-c:a', 'pcm_s16le', tmpWav], { maxBuffer: 1 << 26 })
+    return readFileSync(tmpWav)
+  } finally {
+    rmSync(tmp, { force: true })
+    rmSync(tmpWav, { force: true })
+  }
 }
 const gap = Buffer.alloc(rate * 4 * 1)
 // A: the approved whole-sentence take (0.31 exactly, matching phrase) — no splicing at all.

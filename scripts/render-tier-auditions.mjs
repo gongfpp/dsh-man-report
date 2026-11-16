@@ -40,8 +40,15 @@ writeFileSync(new URL('report.json', dev), JSON.stringify({ note: 'development a
 console.log(JSON.stringify({ cases: report.map(r => [r.file, r.seconds]) }))
 function toWav(raw) {
   const tmp = fileURLToPath(new URL('../dev/voice-bank-v2/audition/.raw.f32', import.meta.url))
+  const tmpWav = fileURLToPath(new URL('../dev/voice-bank-v2/audition/.raw.wav', import.meta.url))
   writeFileSync(tmp, raw)
-  const wav = execFileSync('ffmpeg', ['-v', 'error', '-f', 'f32le', '-ar', String(rate), '-ac', '1', '-i', tmp, '-c:a', 'pcm_s16le', '-f', 'wav', 'pipe:1'], { maxBuffer: 1 << 26 })
-  rmSync(tmp, { force: true })
-  return wav
+  try {
+    // Seekable output so ffmpeg can patch the RIFF/data sizes; pipe-written WAV
+    // keeps 0xFFFFFFFF sizes and strict players refuse it.
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'f32le', '-ar', String(rate), '-ac', '1', '-i', tmp, '-c:a', 'pcm_s16le', tmpWav], { maxBuffer: 1 << 26 })
+    return readFileSync(tmpWav)
+  } finally {
+    rmSync(tmp, { force: true })
+    rmSync(tmpWav, { force: true })
+  }
 }
