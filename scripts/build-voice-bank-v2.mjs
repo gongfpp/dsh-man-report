@@ -1,7 +1,7 @@
 // Builds the four-tier offline voice bank from development UI captures.
 // Local processing only: outer quiet trim with 50 ms padding, one constant gain
 // per clip (target active RMS -24.8 dB, true peak ceiling -2.2 dB), no pitch,
-// speed, phoneme or crossfade edits. MP3 64 kbps mono 24 kHz keeps the package small.
+// speed, phoneme or crossfade edits. WAV PCM16 mono 24 kHz keeps the bank lossless.
 import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -45,10 +45,10 @@ function normalize(pcm, from, to, label) {
   for (let i = 0; i < stage.length; i += 4) stage.writeFloatLE(stage.readFloatLE(i) * gain, i)
   const temp2 = temp + '.g'
   writeFileSync(temp2, stage)
-  const out = join(clipsDir, label + '.mp3')
-  try { media(['-v', 'error', '-y', '-f', 'f32le', '-ar', '24000', '-ac', '1', '-i', temp2, '-c:a', 'libmp3lame', '-b:a', '64k', out]) } finally { unlinkSync(temp2); unlinkSync(probe) }
+  const out = join(clipsDir, label + '.wav')
+  try { media(['-v', 'error', '-y', '-f', 'f32le', '-ar', '24000', '-ac', '1', '-i', temp2, '-c:a', 'pcm_s16le', out]) } finally { unlinkSync(temp2); unlinkSync(probe) }
   const bytes = readFileSync(out), after = measureVoice(out)
-  return { file: 'clips/' + label + '.mp3', sha256: hash(bytes), duration: Number(after.decodedDurationSeconds.toFixed(3)), gainDb: Number(gainDb.toFixed(3)), before, after }
+  return { file: 'clips/' + label + '.wav', sha256: hash(bytes), duration: Number(after.decodedDurationSeconds.toFixed(3)), gainDb: Number(gainDb.toFixed(3)), before, after }
 }
 const report = [], missing = []
 mkdirSync(clipsDir, { recursive: true })
@@ -94,7 +94,7 @@ writeFileSync(manifestPath, JSON.stringify(bank, null, 2) + '\n')
 writeFileSync(new URL('readable-text.txt', voices), Object.entries(bank.clips).map(([key, row]) => `${key}: ${row.text}`).join('\n') + '\n\n' + [...bank.phrases, ...(bank.tokenPhrases ?? [])].map(p => `${p.id}: ${p.text}`).join('\n') + '\n')
 writeFileSync(join(dev, 'build-report.json'), JSON.stringify({
   developmentUiSyntheses: report.length, cloudAsrCalls: 0,
-  processing: 'Outer quiet trim with 50 ms padding; one constant gain per clip to active RMS -24.8 dB with true peak ceiling -2.2 dB; MP3 64 kbps mono 24 kHz; no pitch, speed, phoneme or crossfade edits; no fabricated human review.',
+  processing: 'Outer quiet trim with 50 ms padding; one constant gain per clip to active RMS -24.8 dB with true peak ceiling -2.2 dB; WAV PCM16 mono 24 kHz; no pitch, speed, phoneme or crossfade edits; no fabricated human review.',
   clips: report.map(r => ({ tier: r.tier, key: r.key, file: r.file, sha256: r.sha256, duration: r.duration, gainDb: r.gainDb, rangeSeconds: r.rangeSeconds }))
 }, null, 2) + '\n')
 const stale = readdirSync(clipsDir).filter(name => /\.wav$/.test(name) && config.clips.some(c => name === c.key + '.wav'))

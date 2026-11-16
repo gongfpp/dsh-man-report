@@ -17,8 +17,8 @@ for(const row of [...Object.values(manifest.clips),...Object.values(manifest.amo
 }
 assert.equal(manifest.amounts['CNY:0.31'].sha256,'616c0da0c19a87c82f8531cc8ee2aea1da87c2eb24c9506b72dfed44d9f4c1a2')
 assert.equal(manifest.units.CNY,'unit-yuan')
-assert.equal(manifest.clips['unit-yuan'].file,'clips/unit-yuan-t2.mp3')
-assert.equal(manifest.clips['unit-yuan'].sha256,'aed90d4e38cb3216245de132be42009d3fc4089c026cbf28e11f22541f110609')
+assert.equal(manifest.clips['unit-yuan'].file,'clips/unit-yuan-t2.wav')
+assert.equal(manifest.clips['unit-yuan'].sha256,'bb2bb8ddeaba18e585cb676d96287a13b682bbef73bc27892bcd257166829ce1')
 assert.equal(manifest.clips['unit-yuan'].duration,.68)
 assert.equal(manifest.clips['unit-yuan'].humanListeningVerified,false)
 assert.equal(manifest.clips['unit-yuan'].asrVerified,false)
@@ -34,7 +34,7 @@ for(const tier of tierKeys){
   for(const key of spokenKeys){
     const row=manifest.tierOverrides[tier][key]
     assert.ok(row,'missing '+tier+'/'+key)
-    assert.match(row.file,new RegExp('^clips/'+key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'-'+tier+'\\.mp3$'))
+    assert.match(row.file,new RegExp('^clips/'+key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'-'+tier+'\\.wav$'))
     assert.ok(row.duration>0&&row.duration<12)
     assert.equal(createHash('sha256').update(readFileSync(new URL(row.file,root))).digest('hex'),row.sha256)
   }

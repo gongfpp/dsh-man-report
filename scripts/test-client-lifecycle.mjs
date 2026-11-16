@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import vm from 'node:vm'
+const isAudio = path => /\.(mp3|wav)$/.test(path)
 import { readFileSync } from 'node:fs'
 import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
@@ -117,7 +118,7 @@ for (const count of [0, 1, 1234]) {
     await act(async()=>f.root.root.findByProps({className:'man031-preview-phrase'}).props.onChange({target:{value:phrase.id}}))
     const before=f.requests.length
     await act(async()=>f.root.root.findByProps({className:'man031 man031-settings'}).findByType('button').props.onClick());await flush()
-    const paths=f.requests.slice(before).filter(p=>p.endsWith('.mp3'))
+    const paths=f.requests.slice(before).filter(p => isAudio(p))
     assert.ok(paths[0].endsWith(clipFile(pack,phrase.prefix,'t2')));assert.ok(paths.some(p=>p.endsWith(clipFile(pack,'unit-tokens','t2'))))
     assert.match(f.text(),/本轮用了 2,345 个 Token/)
   }
@@ -173,7 +174,7 @@ for (let i = 0; i < 20; i++) {
   await act(async () => select.props.onChange({ target: { value: phrase.id } }))
   const before = f.requests.length
   await act(async () => f.root.root.findByProps({ className: 'man031 man031-settings' }).findByType('button').props.onClick()); await flush()
-  assert.deepEqual(f.requests.slice(before).filter(path => path.endsWith('.mp3')).map(path => path.split('/').at(-1)), [phrase.prefix,'0','dot','3','1','1',pack.units.CNY,...(phrase.suffix ? [phrase.suffix] : [])].map(key => clipFile(pack,key,tierOf(.311,pack.tierBands.money)).split('/').at(-1)))
+  assert.deepEqual(f.requests.slice(before).filter(path => isAudio(path)).map(path => path.split('/').at(-1)), [phrase.prefix,'0','dot','3','1','1',pack.units.CNY,...(phrase.suffix ? [phrase.suffix] : [])].map(key => clipFile(pack,key,tierOf(.311,pack.tierBands.money)).split('/').at(-1)))
   assert.match(f.text(), /0.311元/); assert.equal(rolls, 0)
   await f.unmount()
 }
@@ -186,12 +187,12 @@ for (let i = 0; i < 20; i++) {
   assert.match(f.text(), /音频网络失败/); assert.equal(rolls, 1)
   await f.click('man031-retry')
   assert.equal(rolls, 1, 'Retry cannot replace the selected twentieth phrase')
-  assert.ok(f.requests.some(path => path.endsWith('/line-clock-t1.mp3')))
+  assert.ok(f.requests.some(path => path.endsWith('/line-clock-t1.wav')))
   assert.match(f.text(), /0.001元/)
   const before = f.requests.length
   await f.event(4)
   assert.equal(rolls, 2)
-  assert.ok(f.requests.slice(before).some(path => path.endsWith('/line-next-play-t1.mp3')), 'new round can select the eleventh phrase')
+  assert.ok(f.requests.slice(before).some(path => path.endsWith('/line-next-play-t1.wav')), 'new round can select the eleventh phrase')
   assert.ok(f.requests.every(path => path.startsWith('/api/man-031/')), 'all twenty phrases remain local')
   await f.unmount()
 }
@@ -217,7 +218,7 @@ for (let i = 0; i < 20; i++) {
   const before = f.requests.length
   await act(async () => button().props.onClick()); await flush()
   assert.match(f.text(), /1.270美元/)
-  assert.deepEqual(f.requests.slice(before).filter(path => path.endsWith('.mp3')).map(path => path.split('/').at(-1)), ['prefix','1','dot','2','7','unit-dollars','line-next'].map(key => clipFile(pack,key,'t3').split('/').at(-1)))
+  assert.deepEqual(f.requests.slice(before).filter(path => isAudio(path)).map(path => path.split('/').at(-1)), ['prefix','1','dot','2','7','unit-dollars','line-next'].map(key => clipFile(pack,key,'t3').split('/').at(-1)))
   await f.previewAmount('0'); await act(async () => button().props.onClick()); await flush()
   assert.match(f.text(), /约花了0.000美元/)
   assert.equal(f.storage.has('man-031.seen.v2'), false)
@@ -230,7 +231,7 @@ for (let i = 0; i < 20; i++) {
   await f.openSettings(); await f.previewAmount('0.311')
   await act(async () => f.root.root.findByProps({ className: 'man031 man031-settings' }).findByType('button').props.onClick()); await flush()
   assert.equal(f.playing, 0); assert.match(f.text(), /0.311元/); assert.match(f.text(), /暂无这个金额/)
-  assert.ok(!f.requests.some(path => path.endsWith('.mp3')), 'no automatic substitution with the available 0.31 whole sample')
+  assert.ok(!f.requests.some(path => isAudio(path)), 'no automatic substitution with the available 0.31 whole sample')
   await f.unmount()
 }
 
@@ -251,8 +252,8 @@ for (let i = 0; i < 20; i++) {
     const f = await fixture({ amount: .31, manifest: pack })
     await f.event(2)
     assert.equal(f.playing, 7, 'published pack uses the selected template, never an unrelated whole sentence')
-    assert.equal(f.requests.filter(url => url.endsWith('.mp3')).length, 7)
-    assert.equal(f.requests.some(url => url.endsWith('.wav')), false, 'the tiered bank is fully local MP3, no legacy MiMo or static MAN mixing')
+    assert.equal(f.requests.filter(url => isAudio(url)).length, 7)
+    assert.ok(f.requests.filter(isAudio).every(url => url.startsWith('/api/man-031/voices/')), 'the tiered bank is fully local, no legacy MiMo or static MAN mixing')
     await f.unmount()
   }
 }
@@ -262,7 +263,7 @@ for (let i = 0; i < 20; i++) {
   let rolls = 0
   const f = await fixture({ amount: .31, manifest: pack, deterministicRandom: () => { rolls++; return .99 } })
   await f.event(2)
-  assert.deepEqual(f.requests.filter(path => path.endsWith('.mp3')), ['/api/man-031/voices/amounts/body-CNY-0.31.mp3'])
+  assert.deepEqual(f.requests.filter(path => isAudio(path)), ['/api/man-031/voices/amounts/body-CNY-0.31.mp3'])
   assert.equal(f.playing, 1); assert.equal(rolls, 2); assert.match(f.text(), /本轮约花了0.310元/)
   assert.ok(f.durations.some(ms => Math.abs(ms - 1430) < 1), 'one complete source uses only its decoded duration and UI tail')
   await f.unmount()
@@ -274,7 +275,7 @@ for (let i = 0; i < 20; i++) {
   await f.event(2); assert.match(f.text(), /音频网络失败/); assert.equal(f.playing, 0)
   await f.click('man031-retry')
   assert.equal(f.playing, 1); assert.equal(rolls, 2, 'full-utterance Retry retains the popup phrase and legacy opener selection')
-  assert.deepEqual(f.requests.filter(path => path.endsWith('.mp3')), Array(2).fill('/api/man-031/voices/amounts/body-CNY-0.31.mp3'))
+  assert.deepEqual(f.requests.filter(path => isAudio(path)), Array(2).fill('/api/man-031/voices/amounts/body-CNY-0.31.mp3'))
   await f.unmount()
 }
 for (const stage of ['manifestDeferred', 'audioDeferred']) {
@@ -283,7 +284,7 @@ for (const stage of ['manifestDeferred', 'audioDeferred']) {
   await f.event(2); assert.equal(f.playing, 0)
   await f.click('man031-close'); waiting.resolve(); await flush()
   assert.equal(f.playing, 0); assert.equal(f.popup().length, 0, 'late full-utterance work cannot revive a dismissed popup')
-  assert.ok(f.requests.filter(path => path.endsWith('.mp3')).every(path => path.endsWith('/amounts/body-CNY-0.31.mp3')))
+  assert.ok(f.requests.filter(path => isAudio(path)).every(path => path.endsWith('/amounts/body-CNY-0.31.mp3')))
   await f.unmount()
 }
 {
@@ -295,7 +296,7 @@ for (const stage of ['manifestDeferred', 'audioDeferred']) {
   await act(async () => f.root.root.findByProps({ className: 'man031 man031-settings' }).findAllByType('button').find(node => ['试听', 'Preview'].includes(node.props.children)).props.onClick()); await flush()
   assert.match(f.text(), /1.270美元/); assert.match(f.text(), /非本轮费用/)
   assert.equal(f.playing, 1)
-  assert.deepEqual(f.requests.filter(path => path.endsWith('.mp3')), ['/api/man-031/voices/amounts/full-USD-1.27.mp3'])
+  assert.deepEqual(f.requests.filter(path => isAudio(path)), ['/api/man-031/voices/amounts/full-USD-1.27.mp3'])
   assert.equal(f.storage.has('man-031.seen.v2'), false)
   await f.unmount()
 }
@@ -304,7 +305,7 @@ for (const stage of ['manifestDeferred', 'audioDeferred']) {
   pack.amounts['CNY:0.31'].phraseId = 'came-to'
   const f = await fixture({ amount: .31, manifest: pack })
   await f.event(2); assert.match(f.text(), /暂无这个金额的整段语音/)
-  assert.equal(f.playing, 0); assert.ok(!f.requests.some(path => path.endsWith('.mp3')), 'a whole sentence flag cannot bypass phrase matching')
+  assert.equal(f.playing, 0); assert.ok(!f.requests.some(path => isAudio(path)), 'a whole sentence flag cannot bypass phrase matching')
   await f.unmount()
 }
 for (const costFailure of ['network', 'http', 'json']) {
@@ -385,7 +386,7 @@ for (const cancellation of ['session', 'currency', 'blur', 'hidden', 'disabled',
 {
   const f = await fixture({ amount: .31, manifest: exactPilot(), deterministicRandom: () => 0 })
   await f.event(2)
-  assert.deepEqual(f.requests.filter(path => path.endsWith('.mp3')), ['/api/man-031/voices/clips/man-firm.mp3', '/api/man-031/voices/amounts/body-CNY-0.31.mp3'], 'exact-only body already contains money and quote, so only original MAN is prepended')
+  assert.deepEqual(f.requests.filter(path => isAudio(path)), ['/api/man-031/voices/clips/man-firm.mp3', '/api/man-031/voices/amounts/body-CNY-0.31.mp3'], 'exact-only body already contains money and quote, so only original MAN is prepended')
   assert.equal(f.playing, 2); assert.match(f.text(), /本轮约花了0.310元/)
   await f.unmount()
 }
@@ -396,7 +397,7 @@ for (const scenario of ['missing', 'wrong-phrase', 'unrounded', 'plan-zero']) {
   const amount = scenario === 'unrounded' ? .3105 : .31
   const f = await fixture({ amount, manifest: pack, cost: scenario === 'plan-zero' ? { status: 'plan', amount: 0 } : undefined, deterministicRandom: () => 0 })
   await f.event(2)
-  assert.equal(f.playing, 0); assert.ok(!f.requests.some(path => path.endsWith('.mp3')), `${scenario}: exactOnly never fetches even available fragment clips`)
+  assert.equal(f.playing, 0); assert.ok(!f.requests.some(path => isAudio(path)), `${scenario}: exactOnly never fetches even available fragment clips`)
   assert.match(f.text(), /暂无这个金额的整段语音/); assert.equal(f.timers.size, 0, 'missing body retains explicit Retry')
   if (scenario === 'unrounded') { assert.match(f.text(), /0.311元/); assert.doesNotMatch(f.text(), /0.31元/) }
   if (scenario === 'plan-zero') assert.match(f.text(), /套餐无额外扣费/)
@@ -410,7 +411,7 @@ for (const scenario of ['missing', 'wrong-phrase', 'unrounded', 'plan-zero']) {
   pack.amounts['CNY:0.31'] = { file: 'amounts/body-CNY-0.31.mp3', phraseId: 'round-cost' }
   await f.click('man031-retry')
   assert.equal(rolls, 2, 'a later manifest retry preserves both popup-scoped selections')
-  assert.deepEqual(f.requests.filter(path => path.endsWith('.mp3')), ['/api/man-031/voices/clips/man-extended.mp3', '/api/man-031/voices/amounts/body-CNY-0.31.mp3'])
+  assert.deepEqual(f.requests.filter(path => isAudio(path)), ['/api/man-031/voices/clips/man-extended.mp3', '/api/man-031/voices/amounts/body-CNY-0.31.mp3'])
   await f.unmount()
 }
 for (const status of ['estimated', 'plan']) {
@@ -432,13 +433,13 @@ for (const status of ['estimated', 'plan']) {
   const f = await fixture({ amount: .31, manifest: pack, networkFailures: 1, deterministicRandom: () => values[rolls++] })
   await f.event(2); assert.equal(rolls, 2); assert.match(f.text(), /本轮约花了0.310元/); assert.doesNotMatch(f.text(), /It's been/)
   const expected = ['man-playful', 'phrase-you-spent', '0', 'dot', '3', '1', 'yuan', 'phrase-this-round'].map(key => `/api/man-031/voices/clips/${key}.mp3`)
-  assert.deepEqual(f.requests.filter(path => path.endsWith('.mp3')), expected, 'selected prefix replaces classic and suffix follows currency')
+  assert.deepEqual(f.requests.filter(path => isAudio(path)), expected, 'selected prefix replaces classic and suffix follows currency')
   const beforeRetry = f.requests.length; await f.click('man031-retry')
   assert.equal(rolls, 2, 'retry retains both opener and phrase')
-  assert.deepEqual(f.requests.slice(beforeRetry).filter(path => path.endsWith('.mp3')), expected)
+  assert.deepEqual(f.requests.slice(beforeRetry).filter(path => isAudio(path)), expected)
   const beforeNext = f.requests.length; await f.event(4)
   assert.equal(rolls, 4, 'next popup rolls both declared choices independently')
-  assert.deepEqual(f.requests.slice(beforeNext).filter(path => path.endsWith('.mp3')), ['man-firm', 'phrase-total', '0', 'dot', '3', '1', 'yuan'].map(key => `/api/man-031/voices/clips/${key}.mp3`))
+  assert.deepEqual(f.requests.slice(beforeNext).filter(path => isAudio(path)), ['man-firm', 'phrase-total', '0', 'dot', '3', '1', 'yuan'].map(key => `/api/man-031/voices/clips/${key}.mp3`))
   assert.ok(!f.requests.some(path => path.includes('undeclared')))
   await f.unmount()
 }
@@ -569,7 +570,7 @@ for (const currency of ['CNY', 'USD']) {
   assert.match(f.text(), /套餐无额外扣费/); assert.ok(f.text().includes(`0.000${currency === 'USD' ? '美元' : '元'}`))
   assert.doesNotMatch(f.text(), /12元|12美元|本轮约花了/)
   assert.equal(rolls, 2, 'explicit plan zero uses the same declared opener and phrase selection')
-  assert.deepEqual(f.requests.filter(path => path.endsWith('.mp3')), ['man-firm', 'phrase-round-cost', '0', currency === 'USD' ? 'dollar' : 'yuan'].map(key => `/api/man-031/voices/clips/${key}.mp3`), 'only actual additional plan cost zero is spoken, never equivalent amount')
+  assert.deepEqual(f.requests.filter(path => isAudio(path)), ['man-firm', 'phrase-round-cost', '0', currency === 'USD' ? 'dollar' : 'yuan'].map(key => `/api/man-031/voices/clips/${key}.mp3`), 'only actual additional plan cost zero is spoken, never equivalent amount')
   assert.equal(f.playing, 4); assert.equal(f.requests.filter(path => path.startsWith('/api/man-031/cost?')).length, 1)
   await f.unmount()
 }
