@@ -10,7 +10,9 @@ npm pack --dry-run
 
 0.5.0 移除了 0.4.0 的在线合成、凭据设置、每日额度、缓存服务和 `man031_voice_prepare` 工具。最终用户不提供 Key；运行包不含语音云服务调用代码。开发时的生成脚本、调用台账与原始文件只保存在不发布的 scripts/dev 中。
 
-0.9.0 起音库按情绪分四档：同一音色（`S_PneVZcKf2`）用四条不同表演指令分别重录全部 65 段台词（数字 0–19、整十数、point、hundred/thousand/million/billion、9 段开头、17 段结尾、5 个货币单位、`token-used`），共 260 段无损 WAV，合计约 18.7MB。`manifest.tierBands` 定义分档边界（金额 .01/1/10，Token 1000/10000/100000），`manifest.tierOverrides` 保存 t1/t3/t4 每段台词的文件、SHA-256 与时长；t2 是 `manifest.clips` 里的默认集。`client.js` 的 `voiceTier(manifest, amount, mode)` 与 `clipFor(manifest, key, tier)` 决定整句使用哪一档，所以同一句里的前缀、数字和结尾永远来自同一档。
+0.9.0 起音库按情绪分四档：同一音色（`S_PneVZcKf2`）用四条不同表演指令分别重录全部 65 段台词（数字 0–19、整十数、point、hundred/thousand/million/billion、9 段开头、17 段结尾、5 个货币单位、`token-used`），共 260 段无损 WAV，合计约 18.7MB。`manifest.tierBands` 定义分档边界（金额 .02/.1/1，Token 1000/10000/100000），`manifest.tierOverrides` 保存 t1/t3/t4 每段台词的文件、SHA-256 与时长；t2 是 `manifest.clips` 里的默认集。`client.js` 的 `voiceTier(manifest, amount, mode)` 与 `clipFor(manifest, key, tier)` 决定整句使用哪一档，所以同一句里的前缀、数字和结尾永远来自同一档。
+
+0.9.0 起常用金额改用整句：`manifest.wholeSamples['CNY:<金额>'][<句子ID>] = { file, sha256, duration, phraseId, fullUtterance: true }`，共 10 个金额（0.01/0.02/0.03/0.05/0.08/0.10/0.20/0.30/0.50/1.00）× 20 句 = 200 条连续整句录音（MP3 96kbps 单声道 24kHz）。`client.js` 的 `getAudioPlan` 先查整句，命中就整句播放、不再拼接；未覆盖的金额与美元继续用四档片段组合。整句由 `build-whole-samples.mjs` 生成（外围静音裁切 + 50ms 余量、单条静态增益到活动帧 RMS -24.8dB、true-peak -2.2dB，不拼接、不变调、不变速），素材与报告在 `dev/voice-bank-v4/`。金额显示与字幕同时改为两位小数向上取整（BigInt 进位），语音分词用同一结果。
 
 历史音库：0.5.0 的 68 份预制 WAV（0.6.0 新增 18 份、0.7.0 再新增 10 份、0.8.0 新增 3 份 Token 片段）包含台词前缀、数字、整十数、point、hundred/thousand/million/billion，以及人民币/美元单位与结尾；其中 65 份被 0.9.0 的 MP3 替换，`yuan.wav`、`dollars.wav`、`singular-dollar.wav` 仅作未使用的历史资源保留。manifest 显式声明资源，宿主只提供这些文件，不开放目录。数字内容经本地缓存识别模型校验；这不能代替主观音质验收。每份新片段的人工听审字段保留 false，不把用户认可的整句或单档扩大成全部素材已听审。
 

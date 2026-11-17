@@ -75,6 +75,7 @@
     "assets/voices/clips/*.mp3",
     "assets/voices/clips/*.wav",
     "assets/voices/amounts/CNY-0.31.wav",
+    "assets/voices/amounts/*.mp3",
     "docs/preview.png",
     "docs/settings.png",
     "docs/SOURCES.md",

@@ -36,10 +36,11 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
   }
   function billingAmount(amount) {
     const [whole, fraction = ''] = displayAmount(amount).split('.')
-    // Decimal half-up, avoiding binary floating-point boundary errors.
-    const digits = (fraction + '0000').slice(0, 4)
-    const mills = BigInt(whole) * 1000n + BigInt(digits.slice(0, 3)) + (digits[3] >= '5' ? 1n : 0n)
-    return `${mills / 1000n}.${String(mills % 1000n).padStart(3, '0')}`
+    // Two decimals, rounded up: any digit past the second cent pushes the value up.
+    // Digits past the ninth decimal are binary float noise and never round a cent up.
+    const digits = fraction.slice(0, 9)
+    const cents = BigInt(whole) * 100n + BigInt((digits + '00').slice(0, 2)) + (digits.slice(2).replace(/0+$/, '') ? 1n : 0n)
+    return `${cents / 100n}.${String(cents % 100n).padStart(2, '0')}`
   }
   function parsePreviewAmount(value) {
     const text = value.trim()
@@ -104,8 +105,11 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
       if (!phrase || typeof phrase.prefix !== 'string' || (phrase.suffix !== undefined && typeof phrase.suffix !== 'string')) throw new Error('unavailable')
     }
     const amountKey = String(Number(billingAmount(amount)))
+    // Whole-sentence takes for common amounts are keyed by amount and phrase, so one
+    // amount can carry every template; the legacy single row stays as the fallback.
+    const whole = phrase ? manifest.wholeSamples?.[`${currency}:${amountKey}`]?.[phrase.id] : undefined
     const sample = manifest.amounts?.[`${currency}:${amountKey}`]
-    const exact = sample && (!phrase || sample.phraseId === phrase.id) ? sample : undefined
+    const exact = whole ?? (sample && (!phrase || sample.phraseId === phrase.id) ? sample : undefined)
     if (manifest.exactOnly === true && !exact) return null
     // Old whole samples remain compatible only without a phrase selection, or when
     // explicitly tagged with its matching phrase. Never reuse another sentence.
@@ -113,7 +117,7 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
     if (exact) clips = [exact]
     else {
       if (manifest.language !== 'en') throw new Error('unavailable')
-      const unit = manifest.units ? (currency === 'USD' ? (billingAmount(amount) === '1.000' ? manifest.units.USD_SINGULAR : manifest.units.USD) : manifest.units.CNY) : currency === 'USD' ? (billingAmount(amount) === '1.000' && manifest.clips?.['singular-dollar'] ? 'singular-dollar' : manifest.clips?.dollars ? 'dollars' : 'dollar') : 'yuan'
+      const unit = manifest.units ? (currency === 'USD' ? (billingAmount(amount) === '1.00' ? manifest.units.USD_SINGULAR : manifest.units.USD) : manifest.units.CNY) : currency === 'USD' ? (billingAmount(amount) === '1.00' && manifest.clips?.['singular-dollar'] ? 'singular-dollar' : manifest.clips?.dollars ? 'dollars' : 'dollar') : 'yuan'
       const keys = [phrase?.prefix ?? 'prefix', ...numberTokens(amount), unit]
       if (phrase?.suffix !== undefined) keys.push(phrase.suffix)
       const tier = voiceTier(manifest, amount, mode)
@@ -430,8 +434,8 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
         popupRef.current = value; setPopup(value)
         if (prefsRef.current.sound) void play(value, true); else later(4200)
       }
-      const message = popup?.mode === 'tokens' ? (popup.cost.usage?.available ? (zh ? `MAN！本轮用了 ${popup.cost.usage.total.toLocaleString('en-US')} 个 Token！` : `MAN! This round used ${popup.cost.usage.total.toLocaleString('en-US')} ${popup.cost.usage.total === 1 ? 'token' : 'tokens'}!`) : (zh ? 'Token 用量暂不可用' : 'Token usage unavailable')) : popup?.cost.status === 'estimated' ? (zh ? `MAN！本轮约花了${billingAmount(popup.cost.amount)}${popup.cost.currency === 'USD' ? '美元' : '元'}！` : `MAN! This round cost about ${billingAmount(popup.cost.amount)} ${popup.cost.currency === 'USD' ? (billingAmount(popup.cost.amount) === '1.000' ? 'dollar' : 'dollars') : 'yuan'}!`)
-        : popup?.cost.status === 'plan' ? (zh ? `套餐无额外扣费 · 0.000${popup.cost.currency === 'USD' ? '美元' : '元'}` : `No additional plan charge · 0.000 ${popup.cost.currency === 'USD' ? 'dollars' : 'yuan'}`) : (zh ? '费用暂不可用' : 'Cost unavailable')
+      const message = popup?.mode === 'tokens' ? (popup.cost.usage?.available ? (zh ? `MAN！本轮用了 ${popup.cost.usage.total.toLocaleString('en-US')} 个 Token！` : `MAN! This round used ${popup.cost.usage.total.toLocaleString('en-US')} ${popup.cost.usage.total === 1 ? 'token' : 'tokens'}!`) : (zh ? 'Token 用量暂不可用' : 'Token usage unavailable')) : popup?.cost.status === 'estimated' ? (zh ? `MAN！本轮约花了${billingAmount(popup.cost.amount)}${popup.cost.currency === 'USD' ? '美元' : '元'}！` : `MAN! This round cost about ${billingAmount(popup.cost.amount)} ${popup.cost.currency === 'USD' ? (billingAmount(popup.cost.amount) === '1.00' ? 'dollar' : 'dollars') : 'yuan'}!`)
+        : popup?.cost.status === 'plan' ? (zh ? `套餐无额外扣费 · 0.00${popup.cost.currency === 'USD' ? '美元' : '元'}` : `No additional plan charge · 0.00 ${popup.cost.currency === 'USD' ? 'dollars' : 'yuan'}`) : (zh ? '费用暂不可用' : 'Cost unavailable')
       const errorText = { permission: zh ? '允许播放 · 重试' : 'Allow audio · Retry', network: zh ? '音频网络失败 · 重试' : 'Audio network error · Retry', decode: zh ? '音频解码失败 · 重试' : 'Audio decode error · Retry', candidate: zh ? '候选声线 · 点击试听' : 'Candidate voice · Preview', unavailable: zh ? '声线尚未就绪 · 重试' : 'Voice unavailable · Retry', 'missing-sample': zh ? '暂无这个金额的整段语音 · 重试' : 'No full voice for this amount · Retry' }
       return h('div', { className: 'man031', 'data-plugin': 'man-031' }, h('style', null, CSS),
         popup && h('div', { ref: popupElement, popover: popup.preview ? 'manual' : undefined, className: 'man031-peek', 'data-side': prefs.side, role: 'status', 'aria-live': 'polite' },

@@ -75,14 +75,15 @@ export async function apply(ctx) {
   catch (error) { if (error.code !== 'ENOENT') throw error }
   if (manifest.schemaVersion !== 1 || !manifest.clips || !manifest.amounts) throw new Error('Invalid man-031 voice manifest')
   const tierRows = Object.values(manifest.tierOverrides ?? {}).flatMap(tier => Object.values(tier ?? {}))
-  const paths = new Set([...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows].map(clip => clip.file))
-  if (paths.size > 512) throw new Error('Too many man-031 voice assets')
+  const wholeRows = Object.values(manifest.wholeSamples ?? {}).flatMap(byPhrase => Object.values(byPhrase ?? {}))
+  const paths = new Set([...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows, ...wholeRows].map(clip => clip.file))
+  if (paths.size > 1024) throw new Error('Too many man-031 voice assets')
   let totalBytes = 0
   for (const file of paths) {
     if (!audioPath(file)) throw new Error('Invalid man-031 voice asset path')
     const bytes = await readFile(new URL(`./assets/voices/${file}`, import.meta.url))
     totalBytes += bytes.length
-    if (totalBytes > 30 * 1024 * 1024) throw new Error('Man-031 voice pack exceeds 30 MiB')
+    if (totalBytes > 64 * 1024 * 1024) throw new Error('Man-031 voice pack exceeds 64 MiB')
     serve(`/api/man-031/voices/${file}`, bytes, file.endsWith('.wav') ? 'audio/wav' : 'audio/mpeg')
   }
   register('/api/man-031/voices/manifest.json', async () => json(manifest))

@@ -85,7 +85,7 @@ for (const clip of config.clips) {
 }
 bank.tierOverrides = { t1: byTier('t1'), t3: byTier('t3'), t4: byTier('t4') }
 bank.tierBands = {
-  money: [{ tier: 't1', below: .01 }, { tier: 't2', below: 1 }, { tier: 't3', below: 10 }, { tier: 't4' }],
+  money: [{ tier: 't1', below: .02 }, { tier: 't2', below: .1 }, { tier: 't3', below: 1 }, { tier: 't4' }],
   tokens: [{ tier: 't1', below: 1000 }, { tier: 't2', below: 10000 }, { tier: 't3', below: 100000 }, { tier: 't4' }]
 }
 bank.notes = `${bank.phrases.length} money and ${bank.tokenPhrases?.length ?? 0} token templates; four emotion tiers re-record every clip (digits, openers, endings, units) with the approved bright reference; tier 2 is the default set. Fixed local voice and number bank, no runtime synthesis/key/provider.`
