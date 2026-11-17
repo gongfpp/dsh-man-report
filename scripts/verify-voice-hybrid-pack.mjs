@@ -46,7 +46,7 @@ export function verifyHybridVoicePack() {
   // Execute the real client's pure planning functions, never a mocked implementation.
   const client = readFileSync(resolve(root, 'client.js'), 'utf8'), start = client.indexOf('  function formatAmount('), end = client.indexOf('  function previewAmount('); assert.ok(start >= 0 && end > start)
   const context = {}; vm.createContext(context); vm.runInContext(client.slice(start, end) + '\nglobalThis.plan = getAudioPlan', context)
-  for (const [currency, amount] of [['CNY', .31], ['USD', 1.27]]) for (const opener of m.openers) assert.deepEqual(Array.from(context.plan(m, amount, currency, opener, 'hybrid-jobs')), [`/api/man-031/voices/${m.clips[opener].file}`, `/api/man-031/voices/${m.amounts[`${currency}:${amount}`].file}`])
+  for (const [currency, amount] of [['CNY', .31], ['USD', 1.27]]) for (const opener of m.openers) assert.deepEqual(Array.from(context.plan(m, amount, currency, opener, 'hybrid-jobs')), [`/api/man-report/voices/${m.clips[opener].file}`, `/api/man-report/voices/${m.amounts[`${currency}:${amount}`].file}`])
   for (const [currency, amount] of [['CNY', 0], ['USD', 0], ['CNY', .01], ['CNY', .31004], ['USD', .31], ['CNY', 1.27], ['USD', 1.27004], ['CNY', 1e-8]]) assert.equal(context.plan(m, amount, currency), null)
   assert.throws(() => context.plan(m, .31, 'CNY', undefined, 'unknown-phrase'))
   const mismatched = structuredClone(m); mismatched.amounts['CNY:0.31'].phraseId = 'other'; assert.equal(context.plan(mismatched, .31, 'CNY'), null)

@@ -12,7 +12,7 @@ const hash = b => createHash('sha256').update(b).digest('hex')
 const originalHash = hash(readFileSync(new URL('clips/unit-yuan.wav', voices)))
 let api
 const window = { test: value => api = value, __ModuleLoader__: { load: ({ factory }) => factory(() => ({})) } }
-vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-031'", "  window.test({ getAudioPlan }); return { name: 'man-031'"), { window, Date })
+vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-report'", "  window.test({ getAudioPlan }); return { name: 'man-report'"), { window, Date })
 mkdirSync(join(dir, 'audition'), { recursive: true })
 const wav = (pcm, file) => {
   const header = Buffer.alloc(44)
@@ -45,7 +45,7 @@ for (const [id, trim] of [['yuan-standard', null], ['yuan-context', [1.815, 2.44
   for (let i = 0; i < pcm.length; i += 2) pcm.writeInt16LE(Math.max(-32768, Math.min(32767, Math.round(pcm.readInt16LE(i) * gain))), i)
   wav(pcm, unit)
   const paths = Array.from(api.getAudioPlan(manifest, .31, 'CNY', undefined, 'round-next'))
-  const parts = paths.map(url => url.endsWith('/clips/unit-yuan.wav') ? pcm : decode(fileURLToPath(new URL(url.replace('/api/man-031/voices/', ''), voices))))
+  const parts = paths.map(url => url.endsWith('/clips/unit-yuan.wav') ? pcm : decode(fileURLToPath(new URL(url.replace('/api/man-report/voices/', ''), voices))))
   const file = join(dir, 'audition', id + '-0.31.wav')
   wav(Buffer.concat(parts), file)
   rows.push({ id, sourceSha256: ledger.sha256, sourceRangeSeconds: trim, unit, unitSha256: hash(readFileSync(unit)), gainDb, after: measureVoice(unit), fullSentence: file, fullSha256: hash(readFileSync(file)), plan: paths, humanListeningVerified: false, asrVerified: false })

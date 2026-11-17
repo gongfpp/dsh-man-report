@@ -9,7 +9,7 @@ mkdirSync(dev, { recursive: true })
 const manifest = JSON.parse(readFileSync(new URL('assets/voices/manifest.json', root), 'utf8'))
 let api
 const window = { test: v => api = v, __ModuleLoader__: { load: ({ factory }) => factory(() => ({})) } }
-vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-031'", "  window.test({ getAudioPlan, numberTokens, displayAmount, billingAmount }); return { name: 'man-031'"), { window, Date })
+vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-report'", "  window.test({ getAudioPlan, numberTokens, displayAmount, billingAmount }); return { name: 'man-report'"), { window, Date })
 const cases = [
   { amount: .005, currency: 'CNY', phrase: 'round-next', label: 't1', caption: '0.005 元 · 轻松无奈' },
   { amount: .3105, currency: 'CNY', phrase: 'round-next', label: 't2', caption: '0.311 元 · 满意微笑' },
@@ -23,7 +23,7 @@ for (const c of cases) {
   const paths = [...api.getAudioPlan(manifest, c.amount, c.currency, undefined, c.phrase)]
   const chunks = []
   for (const path of paths) {
-    const bytes = readFileSync(fileURLToPath(new URL('assets/voices/' + path.replace('/api/man-031/voices/', ''), root)))
+    const bytes = readFileSync(fileURLToPath(new URL('assets/voices/' + path.replace('/api/man-report/voices/', ''), root)))
     chunks.push(execFileSync('ffmpeg', ['-v', 'error', '-i', 'pipe:0', '-f', 'f32le', '-ac', '1', '-ar', String(rate), 'pipe:1'], { input: bytes, maxBuffer: 1 << 26 }), gap)
   }
   const joined = Buffer.concat(chunks)

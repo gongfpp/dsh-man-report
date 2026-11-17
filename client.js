@@ -1,7 +1,18 @@
-window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
+window.__ModuleLoader__.load({ id: 'dsh-man-report', factory: require => {
   const React = require('react')
   const { createElement: h, useState, useEffect, useRef, useSyncExternalStore } = React
-  const KEY = 'man031Completion', PREF = 'man-031.preferences.v2', SEEN = 'man-031.seen.v2'
+  const KEY = 'manReportCompletion', PREF = 'man-report.preferences.v2', SEEN = 'man-report.seen.v2'
+  // Installs from before the dsh-man-report rename keep their settings and seen turns.
+  const LEGACY = [[ 'man-031.preferences.v2', PREF ], [ 'man-031.seen.v2', SEEN ]]
+  function migrate() {
+    try {
+      for (const [from, to] of LEGACY) {
+        const old = localStorage.getItem(from)
+        if (old !== null && localStorage.getItem(to) === null) localStorage.setItem(to, old)
+      }
+    } catch {}
+  }
+  migrate()
   const memorySeen = new Set()
   const defaults = { enabled: true, sound: true, volume: .85, currency: 'CNY', side: 'right' }
   function preferences(value) {
@@ -133,7 +144,7 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
     return clips.map(clip => {
       const path = clip?.file
       if (typeof path !== 'string' || !/^(clips|amounts)\/[A-Za-z0-9_-]+(?:\.[0-9]+)?\.(mp3|wav)$/.test(path)) throw new Error('unavailable')
-      return `/api/man-031/voices/${path}`
+      return `/api/man-report/voices/${path}`
     })
   }
   function previewAmount(manifest, currency, fallback = .31) {
@@ -163,24 +174,24 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
   }
   function speakableCost(cost, mode = 'money') { if (mode === 'tokens') return cost.usage?.available === true; return cost.status === 'estimated' || (cost.status === 'plan' && cost.amount === 0) }
   const CSS = `
-.man031{pointer-events:none;color:var(--dsw-alias-label-primary);font-family:inherit}
-.man031-peek:where([popover]){inset:auto;margin:0;padding:0;border:0;background:transparent;overflow:visible;color:var(--dsw-alias-label-primary)}
-.man031-peek{position:fixed;right:-24px;top:clamp(80px,28vh,260px);width:min(230px,38vw);z-index:90;pointer-events:none;animation:man031-in .45s ease-out both;filter:drop-shadow(-5px 7px 12px #0004)}
-.man031-peek[data-side=left]{right:auto;left:-24px;--man031-direction:-1}.man031-peek img{display:block;width:100%;height:clamp(120px,25vh,270px);object-fit:contain;object-position:bottom right;transform:rotate(-9deg)}
-.man031-peek[data-side=left] img{transform:rotate(9deg)}
-.man031-line{margin:0 30px 0 5px;padding:9px 11px;border-radius:12px;background:var(--dsw-alias-bg-overlay);border:1px solid var(--dsw-alias-border-l1);font-size:14px;font-weight:650;line-height:1.4;overflow-wrap:anywhere}
-.man031-line small{display:block;margin-top:4px;font-size:11px;font-weight:400}.man031-peek[data-side=left] .man031-line{margin:0 5px 0 30px}
-.man031 button,.man031 input,.man031 select{font:inherit;color:var(--dsw-alias-label-primary);accent-color:var(--dsw-alias-brand-primary)}.man031 button,.man031 select{background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l1);border-radius:6px;padding:5px 8px}.man031-close,.man031-retry{pointer-events:auto;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);color:var(--dsw-alias-label-primary);cursor:pointer;border-radius:8px;padding:5px 8px}
-.man031-close{position:absolute;right:30px;top:0}.man031-peek[data-side=left] .man031-close{right:auto;left:30px}.man031-retry{margin:6px 30px;font-size:12px}
-.man031-cost-retry{position:fixed;right:12px;bottom:12px;max-width:calc(100vw - 24px);min-height:44px;pointer-events:auto;z-index:91;cursor:pointer}
-.man031-settings{width:100%;max-width:520px;box-sizing:border-box;padding:16px 0;pointer-events:auto}
-.man031-preview-amount{box-sizing:border-box;width:140px;padding:5px 8px;background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l1);border-radius:6px}
-.man031-settings label{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;margin-bottom:12px;font-size:14px}.man031-settings input[type=range]{width:min(200px,45vw)}.man031-settings select{min-width:140px}.man031-settings button{min-height:40px;cursor:pointer}.man031-note{font-size:12px;margin-top:12px;line-height:1.5}
-@keyframes man031-in{from{transform:translateX(calc(var(--man031-direction,1)*110%))}to{transform:translateX(0)}}
-@media(max-width:600px){.man031-peek{width:150px;top:85px;right:-24px}.man031-peek img{height:150px}.man031-line{font-size:12px;padding:7px}.man031-line small{font-size:10px}.man031-close,.man031-retry{min-width:44px;min-height:44px}}
-@media(prefers-reduced-motion:reduce){.man031-peek{animation:none}}
+.manReport{pointer-events:none;color:var(--dsw-alias-label-primary);font-family:inherit}
+.manReport-peek:where([popover]){inset:auto;margin:0;padding:0;border:0;background:transparent;overflow:visible;color:var(--dsw-alias-label-primary)}
+.manReport-peek{position:fixed;right:-24px;top:clamp(80px,28vh,260px);width:min(230px,38vw);z-index:90;pointer-events:none;animation:manReport-in .45s ease-out both;filter:drop-shadow(-5px 7px 12px #0004)}
+.manReport-peek[data-side=left]{right:auto;left:-24px;--manReport-direction:-1}.manReport-peek img{display:block;width:100%;height:clamp(120px,25vh,270px);object-fit:contain;object-position:bottom right;transform:rotate(-9deg)}
+.manReport-peek[data-side=left] img{transform:rotate(9deg)}
+.manReport-line{margin:0 30px 0 5px;padding:9px 11px;border-radius:12px;background:var(--dsw-alias-bg-overlay);border:1px solid var(--dsw-alias-border-l1);font-size:14px;font-weight:650;line-height:1.4;overflow-wrap:anywhere}
+.manReport-line small{display:block;margin-top:4px;font-size:11px;font-weight:400}.manReport-peek[data-side=left] .manReport-line{margin:0 5px 0 30px}
+.manReport button,.manReport input,.manReport select{font:inherit;color:var(--dsw-alias-label-primary);accent-color:var(--dsw-alias-brand-primary)}.manReport button,.manReport select{background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l1);border-radius:6px;padding:5px 8px}.manReport-close,.manReport-retry{pointer-events:auto;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);color:var(--dsw-alias-label-primary);cursor:pointer;border-radius:8px;padding:5px 8px}
+.manReport-close{position:absolute;right:30px;top:0}.manReport-peek[data-side=left] .manReport-close{right:auto;left:30px}.manReport-retry{margin:6px 30px;font-size:12px}
+.manReport-cost-retry{position:fixed;right:12px;bottom:12px;max-width:calc(100vw - 24px);min-height:44px;pointer-events:auto;z-index:91;cursor:pointer}
+.manReport-settings{width:100%;max-width:520px;box-sizing:border-box;padding:16px 0;pointer-events:auto}
+.manReport-preview-amount{box-sizing:border-box;width:140px;padding:5px 8px;background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l1);border-radius:6px}
+.manReport-settings label{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;margin-bottom:12px;font-size:14px}.manReport-settings input[type=range]{width:min(200px,45vw)}.manReport-settings select{min-width:140px}.manReport-settings button{min-height:40px;cursor:pointer}.manReport-note{font-size:12px;margin-top:12px;line-height:1.5}
+@keyframes manReport-in{from{transform:translateX(calc(var(--manReport-direction,1)*110%))}to{transform:translateX(0)}}
+@media(max-width:600px){.manReport-peek{width:150px;top:85px;right:-24px}.manReport-peek img{height:150px}.manReport-line{font-size:12px;padding:7px}.manReport-line small{font-size:10px}.manReport-close,.manReport-retry{min-width:44px;min-height:44px}}
+@media(prefers-reduced-motion:reduce){.manReport-peek{animation:none}}
 `
-  return { name: 'man-031', inject: ['slots', 'sessions', 'uiSession', 'locale', 'layout'], apply(ctx) {
+  return { name: 'man-report', inject: ['slots', 'sessions', 'uiSession', 'locale', 'layout'], apply(ctx) {
     // Both native settings and the overlay use one browser-local preference store.
     // Keep the existing storage key, so moving the controls does not reset preferences.
     let state = { prefs: preferences(read(PREF, defaults)), degraded: false }, previewHandler
@@ -205,7 +216,7 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
       useEffect(() => { setPhraseId(''); setAmountText(prefs.reportMode === 'tokens' ? '1000' : '0.31') }, [prefs.reportMode])
       useEffect(() => {
         const abort = new AbortController()
-        void json('/api/man-031/voices/manifest.json', abort.signal).then(pack => {
+        void json('/api/man-report/voices/manifest.json', abort.signal).then(pack => {
           if (!abort.signal.aborted) setPack(pack)
         }).catch(() => {})
         return () => abort.abort()
@@ -214,18 +225,18 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
       const amount = prefs.reportMode === 'tokens' && !Number.isSafeInteger(parsed) ? null : parsed
       const locale = useSyncExternalStore(React.useCallback(fn => ctx.locale.subscribe(fn), []), React.useCallback(() => ctx.locale.getSnapshot(), []))
       const zh = /^zh/i.test(locale.active)
-      return h('section', { className: 'man031 man031-settings', 'aria-label': zh ? 'Man 提醒设置' : 'Man notification settings' }, h('style', null, CSS),
+      return h('section', { className: 'manReport manReport-settings', 'aria-label': zh ? 'Man 提醒设置' : 'Man notification settings' }, h('style', null, CSS),
         h('label', null, zh ? '启用' : 'Enabled', h('input', { type: 'checkbox', checked: prefs.enabled, onChange: e => update({ enabled: e.target.checked }) })),
         h('label', null, zh ? '语音' : 'Voice', h('input', { type: 'checkbox', checked: prefs.sound, onChange: e => update({ sound: e.target.checked }) })),
         h('label', null, zh ? '音量' : 'Volume', h('input', { type: 'range', min: 0, max: 1, step: .05, value: prefs.volume, onChange: e => update({ volume: Number(e.target.value) }) })),
-        h('label', null, zh ? '播报内容' : 'Report', h('select', { className: 'man031-report-mode', value: prefs.reportMode, onChange: e => update({ reportMode: e.target.value }) }, h('option', { value: 'money' }, zh ? '金额' : 'Cost'), h('option', { value: 'tokens' }, zh ? 'Token 量' : 'Token count'))),
-        prefs.reportMode !== 'tokens' && h('label', null, zh ? '币种' : 'Currency', h('select', { className: 'man031-currency', value: prefs.currency, onChange: e => update({ currency: e.target.value }) }, h('option', { value: 'CNY' }, zh ? '人民币（元）' : 'Chinese yuan'), h('option', { value: 'USD' }, zh ? '美元' : 'US dollar'))),
+        h('label', null, zh ? '播报内容' : 'Report', h('select', { className: 'manReport-report-mode', value: prefs.reportMode, onChange: e => update({ reportMode: e.target.value }) }, h('option', { value: 'money' }, zh ? '金额' : 'Cost'), h('option', { value: 'tokens' }, zh ? 'Token 量' : 'Token count'))),
+        prefs.reportMode !== 'tokens' && h('label', null, zh ? '币种' : 'Currency', h('select', { className: 'manReport-currency', value: prefs.currency, onChange: e => update({ currency: e.target.value }) }, h('option', { value: 'CNY' }, zh ? '人民币（元）' : 'Chinese yuan'), h('option', { value: 'USD' }, zh ? '美元' : 'US dollar'))),
         h('label', null, zh ? '探头位置' : 'Side', h('select', { value: prefs.side, onChange: e => update({ side: e.target.value }) }, h('option', { value: 'right' }, zh ? '右' : 'Right'), h('option', { value: 'left' }, zh ? '左' : 'Left'))),
-        h('label', null, prefs.reportMode === 'tokens' ? (zh ? '试听 Token 数' : 'Preview tokens') : (zh ? '试听金额' : 'Preview amount'), h('input', { className: 'man031-preview-amount', type: 'text', inputMode: prefs.reportMode === 'tokens' ? 'numeric' : 'decimal', value: amountText, 'aria-invalid': amount === null, onChange: e => setAmountText(e.target.value) })),
-        h('label', null, zh ? '试听句子' : 'Preview phrase', h('select', { className: 'man031-preview-phrase', value: phraseId, onChange: e => setPhraseId(e.target.value) }, h('option', { value: '' }, zh ? '随机' : 'Random'), ...phrases.map(p => h('option', { key: p.id, value: p.id }, (zh ? p.labelZh : p.labelEn) || p.id)))),
+        h('label', null, prefs.reportMode === 'tokens' ? (zh ? '试听 Token 数' : 'Preview tokens') : (zh ? '试听金额' : 'Preview amount'), h('input', { className: 'manReport-preview-amount', type: 'text', inputMode: prefs.reportMode === 'tokens' ? 'numeric' : 'decimal', value: amountText, 'aria-invalid': amount === null, onChange: e => setAmountText(e.target.value) })),
+        h('label', null, zh ? '试听句子' : 'Preview phrase', h('select', { className: 'manReport-preview-phrase', value: phraseId, onChange: e => setPhraseId(e.target.value) }, h('option', { value: '' }, zh ? '随机' : 'Random'), ...phrases.map(p => h('option', { key: p.id, value: p.id }, (zh ? p.labelZh : p.labelEn) || p.id)))),
         h('button', { disabled: amount === null, onClick: () => { if (amount !== null) previewHandler?.(amount, phraseId || undefined) } }, zh ? '试听' : 'Preview'),
-        amount === null && h('div', { className: 'man031-note', role: 'status' }, prefs.reportMode === 'tokens' ? (zh ? '请输入非负整数 Token 数。' : 'Enter a non-negative integer token count.') : (zh ? '请输入可准确表示的有效金额。' : 'Enter a valid, accurately representable amount.')),
-        degraded && h('div', { className: 'man031-note', role: 'status' }, zh ? '此浏览器存储或锁不可用，跨窗口严格去重已降级。' : 'Storage or Locks unavailable: strict cross-window deduplication is degraded.'))
+        amount === null && h('div', { className: 'manReport-note', role: 'status' }, prefs.reportMode === 'tokens' ? (zh ? '请输入非负整数 Token 数。' : 'Enter a non-negative integer token count.') : (zh ? '请输入可准确表示的有效金额。' : 'Enter a valid, accurately representable amount.')),
+        degraded && h('div', { className: 'manReport-note', role: 'status' }, zh ? '此浏览器存储或锁不可用，跨窗口严格去重已降级。' : 'Storage or Locks unavailable: strict cross-window deduplication is degraded.'))
     }
     function Overlay({ usePanelInfo }) {
       const current = ctx.uiSession.adapter.current
@@ -287,7 +298,7 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
           }
           if (!valid()) return
           if (ac.state !== 'running') throw new Error('permission')
-          const manifest = await json('/api/man-031/voices/manifest.json', abort.signal)
+          const manifest = await json('/api/man-report/voices/manifest.json', abort.signal)
           if (!valid()) return
           if (manifest.status === 'candidate' && !manual) throw new Error('candidate')
           if (value.openerKey === undefined && Array.isArray(manifest.openers) && manifest.openers.length) {
@@ -355,7 +366,7 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
           abort = new AbortController()
           const valid = () => !cancelled && generation === loadTicket && pending.current === event && prefsRef.current.currency === currency && prefsRef.current.reportMode === mode && eligible(sessionId) && fresh(event)
           let cost
-          try { cost = validateCost(await json(`/api/man-031/cost?sessionId=${encodeURIComponent(sessionId)}&endSeq=${event.seq}&currency=${currency}${mode === 'tokens' ? '&mode=tokens' : ''}`, abort.signal), currency) }
+          try { cost = validateCost(await json(`/api/man-report/cost?sessionId=${encodeURIComponent(sessionId)}&endSeq=${event.seq}&currency=${currency}${mode === 'tokens' ? '&mode=tokens' : ''}`, abort.signal), currency) }
           catch (e) {
             if (generation === loadTicket) busy = false
             if (e.name === 'AbortError' || !valid()) return
@@ -382,7 +393,7 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
             else later(4200)
           }
           try {
-            if (navigator.locks?.request) await navigator.locks.request('man-031.completion.v2', run)
+            if (navigator.locks?.request) await navigator.locks.request('man-report.completion.v2', run)
             else { setDegraded(true); await run() }
           } catch {
             setDegraded(true)
@@ -437,14 +448,14 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
       const message = popup?.mode === 'tokens' ? (popup.cost.usage?.available ? (zh ? `MAN！本轮用了 ${popup.cost.usage.total.toLocaleString('en-US')} 个 Token！` : `MAN! This round used ${popup.cost.usage.total.toLocaleString('en-US')} ${popup.cost.usage.total === 1 ? 'token' : 'tokens'}!`) : (zh ? 'Token 用量暂不可用' : 'Token usage unavailable')) : popup?.cost.status === 'estimated' ? (zh ? `MAN！本轮约花了${billingAmount(popup.cost.amount)}${popup.cost.currency === 'USD' ? '美元' : '元'}！` : `MAN! This round cost about ${billingAmount(popup.cost.amount)} ${popup.cost.currency === 'USD' ? (billingAmount(popup.cost.amount) === '1.00' ? 'dollar' : 'dollars') : 'yuan'}!`)
         : popup?.cost.status === 'plan' ? (zh ? `套餐无额外扣费 · 0.00${popup.cost.currency === 'USD' ? '美元' : '元'}` : `No additional plan charge · 0.00 ${popup.cost.currency === 'USD' ? 'dollars' : 'yuan'}`) : (zh ? '费用暂不可用' : 'Cost unavailable')
       const errorText = { permission: zh ? '允许播放 · 重试' : 'Allow audio · Retry', network: zh ? '音频网络失败 · 重试' : 'Audio network error · Retry', decode: zh ? '音频解码失败 · 重试' : 'Audio decode error · Retry', candidate: zh ? '候选声线 · 点击试听' : 'Candidate voice · Preview', unavailable: zh ? '声线尚未就绪 · 重试' : 'Voice unavailable · Retry', 'missing-sample': zh ? '暂无这个金额的整段语音 · 重试' : 'No full voice for this amount · Retry' }
-      return h('div', { className: 'man031', 'data-plugin': 'man-031' }, h('style', null, CSS),
-        popup && h('div', { ref: popupElement, popover: popup.preview ? 'manual' : undefined, className: 'man031-peek', 'data-side': prefs.side, role: 'status', 'aria-live': 'polite' },
-          h('img', { src: '/api/man-031/kobe.png', alt: '', draggable: false }),
-          h('div', { className: 'man031-line' }, message,
+      return h('div', { className: 'manReport', 'data-plugin': 'man-report' }, h('style', null, CSS),
+        popup && h('div', { ref: popupElement, popover: popup.preview ? 'manual' : undefined, className: 'manReport-peek', 'data-side': prefs.side, role: 'status', 'aria-live': 'polite' },
+          h('img', { src: '/api/man-report/kobe.png', alt: '', draggable: false }),
+          h('div', { className: 'manReport-line' }, message,
             h('small', null, popup.preview ? (popup.mode === 'tokens' ? (zh ? '试听示例 · 非本轮用量' : 'Preview · not this turn’s usage') : (zh ? '试听示例 · 非本轮费用' : 'Preview · not this turn’s cost')) : popup.mode === 'tokens' ? (zh ? '本轮主会话 · 输入＋输出＋缓存，推理不重复计数' : 'Main session · input + output + cache; reasoning included') : popup.cost.source === 'public-pricing' && popup.cost.status === 'estimated' ? (zh ? '按公开价格估算 · 非实际扣款' : 'Public-price estimate · not actual billing') : popup.cost.status === 'estimated' ? (zh ? '本轮主会话 · 花费估算' : 'Main session · estimated cost') : null)),
-          h('button', { className: 'man031-close', onClick: dismiss, 'aria-label': zh ? '关闭' : 'Dismiss' }, '×'),
-          error && h('button', { className: 'man031-retry', onClick: () => void play(popup, true) }, errorText[error])),
-        costRetry && h('button', { className: 'man031-cost-retry', onClick: costRetry.retry, disabled: costRetry.loading, 'aria-live': 'polite' }, costRetry.loading ? (zh ? '正在查询本轮用量…' : 'Loading turn usage…') : (zh ? '本轮用量查询失败 · 重试' : 'Turn usage request failed · Retry')))
+          h('button', { className: 'manReport-close', onClick: dismiss, 'aria-label': zh ? '关闭' : 'Dismiss' }, '×'),
+          error && h('button', { className: 'manReport-retry', onClick: () => void play(popup, true) }, errorText[error])),
+        costRetry && h('button', { className: 'manReport-cost-retry', onClick: costRetry.retry, disabled: costRetry.loading, 'aria-live': 'polite' }, costRetry.loading ? (zh ? '正在查询本轮用量…' : 'Loading turn usage…') : (zh ? '本轮用量查询失败 · 重试' : 'Turn usage request failed · Retry')))
     }
     class Boundary extends React.Component {
       constructor(props) { super(props); this.state = { error: null } }
@@ -454,14 +465,14 @@ window.__ModuleLoader__.load({ id: 'dsh-man-031', factory: require => {
       }
       render() {
         if (!this.state.error) return this.props.children
-        return h('div', { 'data-man031-error': true, role: 'status', style: { position: 'fixed', bottom: 12, right: 12, maxWidth: 240, padding: 8, borderRadius: 8, zIndex: 91, pointerEvents: 'auto', background: 'var(--dsw-alias-bg-overlay)', color: 'var(--dsw-alias-label-primary)', fontSize: 12 } },
+        return h('div', { 'data-manReport-error': true, role: 'status', style: { position: 'fixed', bottom: 12, right: 12, maxWidth: 240, padding: 8, borderRadius: 8, zIndex: 91, pointerEvents: 'auto', background: 'var(--dsw-alias-bg-overlay)', color: 'var(--dsw-alias-label-primary)', fontSize: 12 } },
           h('div', null, 'Man · ', this.state.error), h('button', { onClick: () => this.setState({ error: null }), style: { background: 'var(--dsw-alias-bg-layer-1)', color: 'var(--dsw-alias-label-primary)', border: '1px solid var(--dsw-alias-border-l1)', borderRadius: 6, padding: '5px 8px', font: 'inherit' } }, '重试 / Retry'))
       }
     }
     const SafeOverlay = props => h(Boundary, null, h(Overlay, props))
-    ctx.slots.inject('shell.overlay', () => ctx.slots.register({ name: 'shell.overlay', id: 'man-031', order: 65 }, SafeOverlay))
+    ctx.slots.inject('shell.overlay', () => ctx.slots.register({ name: 'shell.overlay', id: 'man-report', order: 65 }, SafeOverlay))
     // The left navigation's plugin detail page, not the built-in Settings dialog.
     const BundleSettings = ({ view }) => view === 'page' ? h(Settings) : null
-    ctx.slots.inject('plugins.bundle.config', () => ctx.slots.register({ name: 'plugins.bundle.config', key: 'dsh-man-031' }, BundleSettings))
+    ctx.slots.inject('plugins.bundle.config', () => ctx.slots.register({ name: 'plugins.bundle.config', key: 'dsh-man-report' }, BundleSettings))
   } }
 } })

@@ -1,9 +1,9 @@
 import { readFile } from 'node:fs/promises'
 import { z } from 'zod'
 import { createPriceStore, usageTotals } from './lib/public-pricing.js'
-export const name = 'man-031'
+export const name = 'man-report'
 export const inject = ['connection', 'sessionProjections', 'sessions']
-export const KEY = 'man031Completion'
+export const KEY = 'manReportCompletion'
 const boundary = z.object({ turn: z.number().int().positive(), time: z.number(), seq: z.number().int().nonnegative() })
 const completion = boundary.extend({ startSeq: z.number().int().nonnegative(), startTime: z.number() })
 const sampleSchema = z.object({ key: z.string(), provider: z.string(), model: z.string(), time: z.number(), input: z.number(), output: z.number(), cacheRead: z.number(), cacheWrite: z.number(), reasoning: z.number() })
@@ -67,26 +67,26 @@ export async function apply(ctx) {
   })
   const register = (path, fetch, methods = ['GET']) => ctx.effect(() => ctx.connection.fetch.register({ path, methods, requestBody: 'buffered', fetch }))
   const serve = (path, bytes, type) => register(path, async () => new Response(bytes, { headers: { ...headers, 'content-type': type } }))
-  serve('/api/man-031/kobe.png', await readFile(new URL('./assets/kobe.png', import.meta.url)), 'image/png')
+  serve('/api/man-report/kobe.png', await readFile(new URL('./assets/kobe.png', import.meta.url)), 'image/png')
 
   // Only files explicitly listed in the local manifest are exposed, never a directory route.
   let manifest = { schemaVersion: 1, id: 'kobe-mimo-v1', status: 'unavailable', synthetic: true, clips: {}, amounts: {}, quality: { asrVerified: false, listeningVerified: false } }
   try { manifest = JSON.parse(await readFile(new URL('./assets/voices/manifest.json', import.meta.url), 'utf8')) }
   catch (error) { if (error.code !== 'ENOENT') throw error }
-  if (manifest.schemaVersion !== 1 || !manifest.clips || !manifest.amounts) throw new Error('Invalid man-031 voice manifest')
+  if (manifest.schemaVersion !== 1 || !manifest.clips || !manifest.amounts) throw new Error('Invalid man-report voice manifest')
   const tierRows = Object.values(manifest.tierOverrides ?? {}).flatMap(tier => Object.values(tier ?? {}))
   const wholeRows = Object.values(manifest.wholeSamples ?? {}).flatMap(byPhrase => Object.values(byPhrase ?? {}))
   const paths = new Set([...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows, ...wholeRows].map(clip => clip.file))
-  if (paths.size > 1024) throw new Error('Too many man-031 voice assets')
+  if (paths.size > 1024) throw new Error('Too many man-report voice assets')
   let totalBytes = 0
   for (const file of paths) {
-    if (!audioPath(file)) throw new Error('Invalid man-031 voice asset path')
+    if (!audioPath(file)) throw new Error('Invalid man-report voice asset path')
     const bytes = await readFile(new URL(`./assets/voices/${file}`, import.meta.url))
     totalBytes += bytes.length
-    if (totalBytes > 64 * 1024 * 1024) throw new Error('Man-031 voice pack exceeds 64 MiB')
-    serve(`/api/man-031/voices/${file}`, bytes, file.endsWith('.wav') ? 'audio/wav' : 'audio/mpeg')
+    if (totalBytes > 64 * 1024 * 1024) throw new Error('Man-report voice pack exceeds 64 MiB')
+    serve(`/api/man-report/voices/${file}`, bytes, file.endsWith('.wav') ? 'audio/wav' : 'audio/mpeg')
   }
-  register('/api/man-031/voices/manifest.json', async () => json(manifest))
+  register('/api/man-report/voices/manifest.json', async () => json(manifest))
 
   const prices = createPriceStore(); await prices.init()
   ctx.effect(() => () => prices.dispose())
@@ -135,6 +135,6 @@ export async function apply(ctx) {
     }
     return json(await pending.get(key))
   }
-  register('/api/man-031/cost', costHandler)
+  register('/api/man-report/cost', costHandler)
 
 }

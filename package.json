@@ -1,5 +1,5 @@
 {
-  "name": "dsh-man-031",
+  "name": "dsh-man-report",
   "version": "0.9.0",
   "icon": "icon.png",
   "description": "A Kobe iced-tea turn reminder with cost-meter-first pricing, public-price fallback, token-only reporting, four emotion tiers and bundled offline audio.",
@@ -8,11 +8,11 @@
   "author": "gongfpp",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gongfpp/dsh-man-031.git"
+    "url": "git+https://github.com/gongfpp/dsh-man-report.git"
   },
-  "homepage": "https://github.com/gongfpp/dsh-man-031#readme",
+  "homepage": "https://github.com/gongfpp/dsh-man-report#readme",
   "bugs": {
-    "url": "https://github.com/gongfpp/dsh-man-031/issues"
+    "url": "https://github.com/gongfpp/dsh-man-report/issues"
   },
   "keywords": [
     "dsh",

@@ -25,7 +25,7 @@ export async function generateItem(id, key, options = {}) {
   const ledger = { id, text: item.text, instruction: item.instruction ?? defaultInstruction, speaker: 'S_HhJVZcKf2', model: 'seed-tts-2.0-expressive', status: 'reserved', time: new Date().toISOString(), requestId: randomUUID() }
   const ledgerPath = join(destination, `${id}.json`)
   await writeFile(ledgerPath, JSON.stringify(ledger, null, 2) + '\n', { flag: 'wx' })
-  const payload = JSON.stringify({ user: { uid: 'dsh-man-031-offline-build' }, req_params: { text: item.text, speaker: ledger.speaker, model: ledger.model, audio_params: { format: 'mp3', sample_rate: 24000 }, additions: JSON.stringify({ context_texts: [ledger.instruction] }) } })
+  const payload = JSON.stringify({ user: { uid: 'dsh-man-report-offline-build' }, req_params: { text: item.text, speaker: ledger.speaker, model: ledger.model, audio_params: { format: 'mp3', sample_rate: 24000 }, additions: JSON.stringify({ context_texts: [ledger.instruction] }) } })
   try {
     const response = await new Promise((resolve, reject) => {
       const request = https.request('https://openspeech.bytedance.com/api/v3/tts/unidirectional', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Api-Key': key, 'X-Api-Resource-Id': 'seed-icl-2.0', 'X-Api-Request-Id': ledger.requestId } }, incoming => {

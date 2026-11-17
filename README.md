@@ -18,7 +18,7 @@
 
 在 DSH 的插件页安装此插件，按提示重启 DSH 并刷新页面。打开左侧 **插件 → Man！花了这么多钱！**，在插件详情页调整提醒设置或点击 **试听**。
 
-安装时使用 npm 包名 **`dsh-man-031`**。发行版本见 [npm](https://www.npmjs.com/package/dsh-man-031) 和 [GitHub Releases](https://github.com/gongfpp/dsh-man-031/releases)。市场目录的审核与同步可能晚于发行包上线。
+安装时使用 npm 包名 **`dsh-man-report`**。发行版本见 [npm](https://www.npmjs.com/package/dsh-man-report) 和 [GitHub Releases](https://github.com/gongfpp/dsh-man-report/releases)。市场目录的审核与同步可能晚于发行包上线。
 
 [dsh-cost-meter](https://www.npmjs.com/package/dsh-cost-meter) 为可选：装了优先使用它的本轮计费结果；没装或查询失败时，按各次请求的模型、原生 Token 用量与公开单价分别计算后求和，标注 **“按公开价格估算 · 非实际扣款”**。Token 模式不查询价格。
 

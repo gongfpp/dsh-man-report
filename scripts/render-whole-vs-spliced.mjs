@@ -9,7 +9,7 @@ mkdirSync(out, { recursive: true })
 const manifest = JSON.parse(readFileSync(new URL('assets/voices/manifest.json', root), 'utf8'))
 let api
 const window = { test: v => api = v, __ModuleLoader__: { load: ({ factory }) => factory(() => ({})) } }
-vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-031'", "  window.test({ getAudioPlan, numberTokens, displayAmount, billingAmount }); return { name: 'man-031'"), { window, Date })
+vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-report'", "  window.test({ getAudioPlan, numberTokens, displayAmount, billingAmount }); return { name: 'man-report'"), { window, Date })
 const rate = 24000
 const toF32 = bytes => execFileSync('ffmpeg', ['-v', 'error', '-i', 'pipe:0', '-f', 'f32le', '-ac', '1', '-ar', String(rate), 'pipe:1'], { input: bytes, maxBuffer: 1 << 26 })
 const toWav = raw => {
@@ -36,7 +36,7 @@ const phrase = 'jobs'
 const fragmentPack = { ...manifest, amounts: {} }
 const paths = [...api.getAudioPlan(fragmentPack, .31, 'CNY', undefined, phrase)]
 const chunks = []
-for (const p of paths) chunks.push(toF32(readFileSync(fileURLToPath(new URL('assets/voices/' + p.replace('/api/man-031/voices/', ''), root)))))
+for (const p of paths) chunks.push(toF32(readFileSync(fileURLToPath(new URL('assets/voices/' + p.replace('/api/man-report/voices/', ''), root)))))
 const spliced = Buffer.concat(chunks)
 const files = {
   'A-whole-0.31.wav': whole,

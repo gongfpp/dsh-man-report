@@ -1,8 +1,8 @@
 {
   "$schema": "../schema/plugin.schema.json",
-  "id": "gongfpp/dsh-man-031",
+  "id": "gongfpp/dsh-man-report",
   "name": "Man！花了这么多钱！",
-  "repository": "https://github.com/gongfpp/dsh-man-031",
+  "repository": "https://github.com/gongfpp/dsh-man-report",
   "category": "notify",
   "description": {
     "en": "Shows a Kobe iced-tea side popup and reports per-turn costs or token counts with bundled offline audio, voiced in four emotion tiers by amount. Uses dsh-cost-meter first, or estimates each request from native usage and public prices. Includes twenty cost phrases, four token phrases, CNY/USD, three-decimal rounding and custom previews; no runtime TTS service or API key.",

@@ -47,7 +47,7 @@ await apply({
   sessions: { get: id => id === 'test-session' ? session : undefined },
   sessionProjections: { register: async d => { definition = d; return { stateOf: value => { assert.equal(value, session); return queryState } } } },
   fiber: { entry: { id: 'test-entry' } },
-  provide: (name, service) => { assert.equal(name, 'man031Voice'); voiceService = service },
+  provide: (name, service) => { assert.equal(name, 'manReportVoice'); voiceService = service },
   get: key => {
     if (key === 'costMeter' && meterAvailable) return { getTurnCost: async (...args) => { calls.push(args); if (throwMeter) throw new Error('test'); return raw } }
     if (key === 'tools') return { register: tool => { registeredTools.push(tool); return () => { toolDisposed++ } } }
@@ -57,14 +57,14 @@ await apply({
   connection: { fetch: { register: route => { assert.equal(routes.has(route.path), false); routes.set(route.path, route); return async () => { disposedRoutes++ } } } },
   effect: fn => effects.push(fn()),
 })
-assert.equal(definition.key, 'man031Completion'); assert.equal(definition.stateVersion, 3)
+assert.equal(definition.key, 'manReportCompletion'); assert.equal(definition.stateVersion, 3)
 definition.stateSchema.parse(next); definition.wire.viewSchema.parse(next.latest)
 assert.equal(definition.wire.view(next), next.latest)
-const image = await routes.get('/api/man-031/kobe.png').fetch()
+const image = await routes.get('/api/man-report/kobe.png').fetch()
 assert.equal(image.status, 200); assert.equal(image.headers.get('content-type'), 'image/png')
 assert.ok((await image.arrayBuffer()).byteLength > 500)
-assert.equal(routes.has('/api/man-031/man-031.mp3'), false, 'no misleading generic fixed-amount TTS')
-const manifest = await (await routes.get('/api/man-031/voices/manifest.json').fetch()).json()
+assert.equal(routes.has('/api/man-report/man-report.mp3'), false, 'no misleading generic fixed-amount TTS')
+const manifest = await (await routes.get('/api/man-report/voices/manifest.json').fetch()).json()
 assert.equal(manifest.schemaVersion, 1)
 const tierRows = Object.values(manifest.tierOverrides ?? {}).flatMap(tier => Object.values(tier ?? {}))
 assert.ok(tierRows.length > 0, 'tier overrides must be served, not only the default set')
@@ -72,16 +72,16 @@ const wholeRows = Object.values(manifest.wholeSamples ?? {}).flatMap(byPhrase =>
 assert.equal(wholeRows.length, 200, 'every whole-sentence take must be served')
 const declared = [...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows, ...wholeRows]
 for (const clip of declared) {
-  const route = routes.get(`/api/man-031/voices/${clip.file}`)
+  const route = routes.get(`/api/man-report/voices/${clip.file}`)
   assert.ok(route, `tier asset route missing: ${clip.file}`)
   const res = await route.fetch()
   assert.equal(res.status, 200)
   assert.equal(res.headers.get('content-type'), clip.file.endsWith('.wav') ? 'audio/wav' : 'audio/mpeg')
   assert.ok((await res.arrayBuffer()).byteLength > 100)
 }
-const voiceRoutes = [...routes.keys()].filter(path => path.startsWith('/api/man-031/voices/'))
+const voiceRoutes = [...routes.keys()].filter(path => path.startsWith('/api/man-report/voices/'))
 assert.equal(voiceRoutes.length, new Set(declared.map(clip => clip.file)).size + 1, 'manifest plus every declared clip, nothing else')
-const cost = async query => routes.get('/api/man-031/cost').fetch(new Request(`https://local/api/man-031/cost?${query}`))
+const cost = async query => routes.get('/api/man-report/cost').fetch(new Request(`https://local/api/man-report/cost?${query}`))
 const query = 'sessionId=test-session&endSeq=7&currency='
 const cny = await cost(query + 'CNY'); assert.equal(cny.headers.get('cache-control'), 'no-store')
 assert.equal((await cny.json()).amount, 0.0031)
@@ -100,7 +100,7 @@ raw = plan
 assert.equal((await (await cost('sessionId=test-session&endSeq=8')).json()).status, 'plan', 'unknown must be retryable, not cached')
 throwMeter = true
 assert.equal((await (await cost('sessionId=test-session&endSeq=8&currency=USD')).json()).reason, 'missing-usage')
-for (const path of ['/api/man-031/voice/resolve','/api/man-031/voice/configure','/api/man-031/voice/status','/api/man-031/voice/audio']) assert.equal(routes.has(path), false, 'offline plugin exposes no provider or key endpoint')
+for (const path of ['/api/man-report/voice/resolve','/api/man-report/voice/configure','/api/man-report/voice/status','/api/man-report/voice/audio']) assert.equal(routes.has(path), false, 'offline plugin exposes no provider or key endpoint')
 assert.equal(registeredTools.length, 0); assert.equal(voiceService, undefined); assert.equal(records.size, 0)
 await Promise.all(effects.map(fn => fn()))
 assert.equal(toolDisposed, 0)

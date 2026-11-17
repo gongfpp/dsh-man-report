@@ -36,7 +36,7 @@ assert.equal(usageTotals(state.recent[0].samples).total,3300)
 const routes=new Map(),effects=[];let meterCalls=0,meter={getTurnCost:async()=>{meterCalls++;throw Error('offline')}}
 const session={}
 await apply({sessions:{get:()=>session},sessionProjections:{register:async d=>{d.stateSchema.parse(state);return{stateOf:()=>state}}},get:()=>meter,connection:{fetch:{register:r=>{routes.set(r.path,r);return()=>{}}}},effect:f=>effects.push(f())})
-const request=async(mode='',currency='USD')=>(await routes.get('/api/man-031/cost').fetch(new Request(`https://local/api/man-031/cost?sessionId=s&endSeq=5&currency=${currency}${mode}`))).json()
+const request=async(mode='',currency='USD')=>(await routes.get('/api/man-report/cost').fetch(new Request(`https://local/api/man-report/cost?sessionId=s&endSeq=5&currency=${currency}${mode}`))).json()
 let result=await request('&mode=tokens');assert.equal(meterCalls,0);assert.equal(result.source,'native-usage');assert.equal(result.usage.total,3300)
 result=await request();assert.equal(result.source,'public-pricing');assert.equal(result.status,'estimated');assert.equal(meterCalls,1)
 meter=undefined;result=await request();assert.equal(result.source,'public-pricing');assert.equal(result.usage.available,true)

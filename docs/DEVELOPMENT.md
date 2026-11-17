@@ -8,7 +8,7 @@ npm pack --dry-run
 
 ## 当前架构：仅离线素材播放
 
-0.5.0 移除了 0.4.0 的在线合成、凭据设置、每日额度、缓存服务和 `man031_voice_prepare` 工具。最终用户不提供 Key；运行包不含语音云服务调用代码。开发时的生成脚本、调用台账与原始文件只保存在不发布的 scripts/dev 中。
+0.5.0 移除了 0.4.0 的在线合成、凭据设置、每日额度、缓存服务和 `manReport_voice_prepare` 工具。最终用户不提供 Key；运行包不含语音云服务调用代码。开发时的生成脚本、调用台账与原始文件只保存在不发布的 scripts/dev 中。
 
 0.9.0 起音库按情绪分四档：同一音色（`S_PneVZcKf2`）用四条不同表演指令分别重录全部 65 段台词（数字 0–19、整十数、point、hundred/thousand/million/billion、9 段开头、17 段结尾、5 个货币单位、`token-used`），共 260 段无损 WAV，合计约 18.7MB。`manifest.tierBands` 定义分档边界（金额 .02/.1/1，Token 1000/10000/100000），`manifest.tierOverrides` 保存 t1/t3/t4 每段台词的文件、SHA-256 与时长；t2 是 `manifest.clips` 里的默认集。`client.js` 的 `voiceTier(manifest, amount, mode)` 与 `clipFor(manifest, key, tier)` 决定整句使用哪一档，所以同一句里的前缀、数字和结尾永远来自同一档。
 
@@ -26,11 +26,11 @@ npm pack --dry-run
 
 ## 原生插件设置
 
-0.5.6 将全部设置放在 `plugins.bundle.config`，以包名 `dsh-man-031` 为 key，仅在 `view: 'page'` 渲染；路径是左侧「插件 → Man！花了这么多钱！」详情页。旧 `settings.plugins.tab` 注册已移除，不再放在「内置插件」中。原 `man-031.preferences.v2` 偏好键不变，设置与提醒通过同一订阅状态同步，试听沿用现有音频控制器。试听图片使用浏览器原生 top-layer popover；正常轮次提醒的呈现方式不变。
+0.5.6 将全部设置放在 `plugins.bundle.config`，以包名 `dsh-man-report` 为 key，仅在 `view: 'page'` 渲染；路径是左侧「插件 → Man！花了这么多钱！」详情页。旧 `settings.plugins.tab` 注册已移除，不再放在「内置插件」中。原 `man-report.preferences.v2` 偏好键不变，设置与提醒通过同一订阅状态同步，试听沿用现有音频控制器。试听图片使用浏览器原生 top-layer popover；正常轮次提醒的呈现方式不变。
 
 ## 费用与生命周期
 
-投影 `man031Completion` 使用 stateVersion 3，配对 turn/start 与 completed turn/end，增量收集 request/header、request/context、assistant/message 和 compaction/summary 的请求模型与原生用量。服务端每轮最多 2048 条、保留最近 8 轮，wire 仍只传边界；客户端不重新扫描历史。authenticated GET `/api/man-031/cost` 校验主会话本轮边界，再优先调用 costMeter 的 getTurnCost(sessionId,startSeq,endSeq,currency)。
+投影 `manReportCompletion` 使用 stateVersion 3，配对 turn/start 与 completed turn/end，增量收集 request/header、request/context、assistant/message 和 compaction/summary 的请求模型与原生用量。服务端每轮最多 2048 条、保留最近 8 轮，wire 仍只传边界；客户端不重新扫描历史。authenticated GET `/api/man-report/cost` 校验主会话本轮边界，再优先调用 costMeter 的 getTurnCost(sessionId,startSeq,endSeq,currency)。
 
 只采信 apiCost 与完整定价覆盖；cost 中的套餐等价值不视作额外扣费。服务缺失、异常、超时或结果不完整时，用 lib/public-pricing.js 按每个请求分别估算；缺失用量或单价仍返回 unknown。公开数据只做固定 URL、有大小限制和超时的后台更新，每实例最多每天一次；始终先用随包快照，不阻塞提醒。带日期的汇率不是声称实时账单。未知不当作零，不混入无法归属的子任务。
 

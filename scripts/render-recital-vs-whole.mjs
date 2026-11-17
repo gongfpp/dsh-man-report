@@ -10,7 +10,7 @@ mkdirSync(out, { recursive: true })
 const manifest = JSON.parse(readFileSync(new URL('assets/voices/manifest.json', root), 'utf8'))
 let api
 const window = { test: v => api = v, __ModuleLoader__: { load: ({ factory }) => factory(() => ({})) } }
-vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-031'", "  window.test({ getAudioPlan }); return { name: 'man-031'"), { window, Date })
+vm.runInNewContext(readFileSync(new URL('client.js', root), 'utf8').replace("  return { name: 'man-report'", "  window.test({ getAudioPlan }); return { name: 'man-report'"), { window, Date })
 
 const rate = 24000
 const toF32 = bytes => execFileSync('ffmpeg', ['-v', 'error', '-i', 'pipe:0', '-f', 'f32le', '-ac', '1', '-ar', String(rate), 'pipe:1'], { input: bytes, maxBuffer: 1 << 26 })
@@ -42,7 +42,7 @@ const chunksB = []
 const chunksC = []
 const used = []
 for (const p of paths) {
-  const rel = p.replace('/api/man-031/voices/', '')
+  const rel = p.replace('/api/man-report/voices/', '')
   const name = rel.split('/').at(-1)
   const base = readFileSync(fileURLToPath(new URL('assets/voices/' + rel, root)))
   chunksB.push(toF32(base))
