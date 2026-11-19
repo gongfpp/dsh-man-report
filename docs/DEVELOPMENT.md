@@ -14,7 +14,7 @@ npm pack --dry-run
 
 0.9.0 起常用金额改用整句：`manifest.wholeSamples['CNY:<金额>'][<句子ID>] = { file, sha256, duration, phraseId, fullUtterance: true }`，共 10 个金额（0.01/0.02/0.03/0.05/0.08/0.10/0.20/0.30/0.50/1.00）× 20 句 = 200 条连续整句录音（MP3 96kbps 单声道 24kHz）。`client.js` 的 `getAudioPlan` 先查整句，命中就整句播放、不再拼接；未覆盖的金额与美元继续用四档片段组合。整句由 `build-whole-samples.mjs` 生成（外围静音裁切 + 50ms 余量、单条静态增益到活动帧 RMS -24.8dB、true-peak -2.2dB，不拼接、不变调、不变速），素材与报告在 `dev/voice-bank-v4/`。金额显示与字幕同时改为两位小数向上取整（BigInt 进位），语音分词用同一结果。
 
-历史音库：0.5.0 的 68 份预制 WAV（0.6.0 新增 18 份、0.7.0 再新增 10 份、0.8.0 新增 3 份 Token 片段）包含台词前缀、数字、整十数、point、hundred/thousand/million/billion，以及人民币/美元单位与结尾；其中 65 份被 0.9.0 的 MP3 替换，`yuan.wav`、`dollars.wav`、`singular-dollar.wav` 仅作未使用的历史资源保留。manifest 显式声明资源，宿主只提供这些文件，不开放目录。数字内容经本地缓存识别模型校验；这不能代替主观音质验收。每份新片段的人工听审字段保留 false，不把用户认可的整句或单档扩大成全部素材已听审。
+历史音库：0.5.0 的 68 份预制 WAV（0.6.0 新增 18 份、0.7.0 再新增 10 份、0.8.0 新增 3 份 Token 片段）包含台词前缀、数字、整十数、point、hundred/thousand/million/billion，以及人民币/美元单位与结尾；其中 65 份被 0.9.0 的四档素材替换，其余 3 份（`yuan.wav`、`dollars.wav`、`singular-dollar.wav`）从未被 0.9.0 的运行路径引用，已连同旧的 `amounts/CNY-0.31.wav` 一起从包内删除。manifest 显式声明资源，宿主只提供这些文件，不开放目录。数字内容经本地缓存识别模型校验；这不能代替主观音质验收。每份新片段的人工听审字段保留 false，不把用户认可的整句或单档扩大成全部素材已听审。
 
 0.9.0 之后数字片段改由“整段数字朗读”切分：每档让同一音色一口气念完 33 个数字（`Zero. One. … Ninety. Point. Hundred. Thousand. Million. Billion.`），再按真实停顿切开，所以同一句里的数字共享同一段语调与气口。切分脚本 `split-recital.py`（能量门限 -50dB、110ms 合并、50ms 余量）用本地缓存的识别模型做词序对齐，只保留词序匹配的切点，不校验发音、不代替听审；合并切分与气口位置记在 `dev/voice-bank-v3/clips/<tier>/report.json`。`build-voice-bank-v3.mjs` 把四档各 33 段换进音库（前缀、单位、结尾仍用 0.9.0 的独立录制），manifest 增加 `voiceBank.layout: 'recital-numbers'` 与每段的 `source: recital-<tier>`，其余字段结构不变。语音节奏对比脚本 `render-recital-vs-whole.mjs` 用真实 `getAudioPlan` 渲染 A（整句样张）/B（旧独立片段拼接）/C（整段朗读切分）三条。
 
@@ -22,7 +22,7 @@ npm pack --dry-run
 
 生成脚本：`generate-doubao-offline.mjs`。渲染脚本：`render-doubao-offline-pilot.mjs`。发布脚本：`publish-doubao-offline.mjs`。所有调用仅发生在开发阶段，使用现有音色；不新建音色、不调用付费云识别。单词各自完整合成，不在词中切割；只修剪外围低能量静音并保留 50ms 余量，静态增益统一活动帧 RMS 约 -24.8dB，true-peak 上限 -2.2dB，不变速或变调。
 
-用户确认的 0.31 元整句保持原样：SHA-256 `616c0da0c19a87c82f8531cc8ee2aea1da87c2eb24c9506b72dfed44d9f4c1a2`。资源仍原样保留，但只有句子 ID 匹配时才能使用，不能替代二十句中的另一句。0.6.0 按用户新要求，将显示及数字分词统一为三位小数四舍五入：从完整十进制文本提取千分位与下一位，用 BigInt 进位，避免浮点乘法边界错误；原费用记录不变。支持 0 至小于 1e12 的费用，较小正数按相同规则显示为 0.000。自动提醒随机一次、重试固定本次句子；试听可显式选二十句之一。0.7.0 的新增文案计划在 generate-doubao-phrases-v3.mjs，复用原55份资源，只另生成10份固定片段；发布命令为 `node scripts/publish-doubao-phrases.mjs --v3`。新素材生成与发布脚本为 generate-doubao-phrases.mjs / publish-doubao-phrases.mjs；本地识别报告、真实界面选句及 0.000749→0.001 播放证据位于 dev/doubao-phrases-v2。
+用户确认的 0.31 元整句 SHA-256 `616c0da0c19a87c82f8531cc8ee2aea1da87c2eb24c9506b72dfed44d9f4c1a2` 记录在此仅作历史：该文件已在 0.9.0 的清理中删除，0.31 元现在走常规金额的档位拼接（不在十条整句覆盖范围内）。0.6.0 按用户新要求，将显示及数字分词统一为三位小数四舍五入：从完整十进制文本提取千分位与下一位，用 BigInt 进位，避免浮点乘法边界错误；原费用记录不变。支持 0 至小于 1e12 的费用，较小正数按相同规则显示为 0.000。自动提醒随机一次、重试固定本次句子；试听可显式选二十句之一。0.7.0 的新增文案计划在 generate-doubao-phrases-v3.mjs，复用原55份资源，只另生成10份固定片段；发布命令为 `node scripts/publish-doubao-phrases.mjs --v3`。新素材生成与发布脚本为 generate-doubao-phrases.mjs / publish-doubao-phrases.mjs；本地识别报告、真实界面选句及 0.000749→0.001 播放证据位于 dev/doubao-phrases-v2。
 
 ## 原生插件设置
 

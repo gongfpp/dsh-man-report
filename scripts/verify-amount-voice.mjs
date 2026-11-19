@@ -5,7 +5,7 @@ import vm from 'node:vm'
 const root = new URL('../assets/voices/', import.meta.url)
 const manifest = JSON.parse(readFileSync(new URL('manifest.json', root), 'utf8'))
 assert.equal(manifest.id,'kobe-doubao-offline-v1');assert.equal(manifest.provider,'doubao');assert.equal(manifest.runtime,undefined)
-assert.equal(manifest.exactOnly,false);assert.equal(Object.keys(manifest.clips).length,68);assert.equal(manifest.phrases.length,20)
+assert.equal(manifest.exactOnly,false);assert.equal(Object.keys(manifest.clips).length,65);assert.equal(manifest.phrases.length,20)
 assert.equal(new Set(manifest.phrases.map(p=>p.id)).size,20)
 const { phrases: expectedPhrases } = await import('./generate-doubao-phrases-v3.mjs')
 assert.deepEqual(manifest.phrases, expectedPhrases)
@@ -16,7 +16,7 @@ for(const row of [...Object.values(manifest.clips),...Object.values(manifest.amo
   if(row.file.endsWith('.wav')){assert.equal(b.toString('ascii',0,4),'RIFF');assert.equal(b.toString('ascii',8,12),'WAVE')}
   else assert.ok(b[0]===0xff||b.toString('ascii',0,3)==='ID3','MP3 container')
 }
-assert.equal(manifest.amounts['CNY:0.31'].sha256,'616c0da0c19a87c82f8531cc8ee2aea1da87c2eb24c9506b72dfed44d9f4c1a2')
+assert.deepEqual(manifest.amounts,{},'the retired 0.31 whole sample is gone; wholeSamples covers the common amounts')
 // Whole-sentence takes: one continuous recording per phrase and amount, never shared.
 const wholeSamples = manifest.wholeSamples ?? {}
 assert.deepEqual(Object.keys(wholeSamples).sort(), ['CNY:0.01','CNY:0.02','CNY:0.03','CNY:0.05','CNY:0.08','CNY:0.1','CNY:0.2','CNY:0.3','CNY:0.5','CNY:1'].sort())
@@ -41,7 +41,7 @@ assert.equal(manifest.clips['unit-yuan'].asrVerified,false)
 // Four emotion tiers: every spoken clip exists in each tier with its own file and hash.
 const tierKeys=Object.keys(manifest.tierOverrides??{})
 assert.deepEqual(tierKeys.sort(),['t1','t3','t4'])
-const spokenKeys=Object.keys(manifest.clips).filter(k=>!['yuan','dollars','singular-dollar'].includes(k))
+const spokenKeys=Object.keys(manifest.clips)
 assert.equal(spokenKeys.length,65)
 assert.deepEqual(manifest.tierBands.money.map(b=>b.tier),['t1','t2','t3','t4'])
 assert.deepEqual(manifest.tierBands.tokens.map(b=>b.tier),['t1','t2','t3','t4'])
@@ -100,4 +100,4 @@ assert.deepEqual(Array.from(api.numberTokens(9.9995)),['10'])
 for(const path of ['../index.js','../client.js']){
  const text=readFileSync(new URL(path,import.meta.url),'utf8');for(const forbidden of ['openspeech.bytedance.com','voice/resolve','voice/configure','manReport_voice_prepare','豆包连接'])assert.equal(text.includes(forbidden),false)
 }
-console.log('offline audio: passed (68 hashed clips, 4 emotion tiers x 65 re-recorded clips, 200 whole-sentence takes across 10 amounts x 20 templates; captions and speech share two-decimal ceiling; no runtime provider/key/tool)')
+console.log('offline audio: passed (65 hashed clips, 4 emotion tiers x 65 re-recorded clips, 200 whole-sentence takes across 10 amounts x 20 templates; captions and speech share two-decimal ceiling; no runtime provider/key/tool)')

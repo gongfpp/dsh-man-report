@@ -551,14 +551,6 @@
       "humanListeningVerified": false,
       "asrVerified": false
     },
-    "yuan": {
-      "file": "clips/yuan.wav",
-      "text": "元。Job's not finished.",
-      "sha256": "84cf625b73e092465e713f67b3ad2c76842e33e04b972c495ab149b2052bf449",
-      "duration": 2.94,
-      "asrVerified": false,
-      "humanListeningVerified": false
-    },
     "hundred": {
       "file": "clips/hundred-t2.wav",
       "duration": 0.61,
@@ -610,22 +602,6 @@
       "source": "recital-t2",
       "humanListeningVerified": false,
       "asrVerified": false
-    },
-    "dollars": {
-      "file": "clips/dollars.wav",
-      "text": "Dollars. Job's not finished.",
-      "sha256": "86e8b3c9be709f9d620c631689dc4aeac5cc18d6c4ed59d7116d01f3aff9f974",
-      "duration": 2.532,
-      "asrVerified": false,
-      "humanListeningVerified": false
-    },
-    "singular-dollar": {
-      "file": "clips/singular-dollar.wav",
-      "text": "Dollar. Job's not finished.",
-      "sha256": "1d4cd2ad5d16f86213a4cb1e6fd69de4b32ddb285a372358e6fbfd8ff6115a00",
-      "duration": 2.49,
-      "asrVerified": false,
-      "humanListeningVerified": false
     },
     "about": {
       "text": "About.",
@@ -876,17 +852,7 @@
       "humanListeningVerified": false
     }
   },
-  "amounts": {
-    "CNY:0.31": {
-      "file": "amounts/CNY-0.31.wav",
-      "phraseId": "doubao-jobs",
-      "fullUtterance": true,
-      "sha256": "616c0da0c19a87c82f8531cc8ee2aea1da87c2eb24c9506b72dfed44d9f4c1a2",
-      "humanListeningVerified": true,
-      "currencyHumanVerified": true,
-      "asrVerified": false
-    }
-  },
+  "amounts": {},
   "verification": {
     "numericContentChecked": true,
     "source": "pre-generated with one fixed Doubao voice; local cached ASR; constant per-clip level adjustment",

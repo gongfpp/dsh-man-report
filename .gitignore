@@ -2,3 +2,4 @@ node_modules/
 dev/
 *.tgz
 scripts/__pycache__/
+assets/voices/readable-text.txt
