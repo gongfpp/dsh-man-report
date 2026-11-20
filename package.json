@@ -1,6 +1,6 @@
 {
   "name": "dsh-man-report",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "icon": "icon.png",
   "description": "A Kobe iced-tea turn reminder with cost-meter-first pricing, public-price fallback, token-only reporting, four emotion tiers and bundled offline audio.",
   "type": "module",
@@ -30,7 +30,7 @@
   "dshhub": {
     "schemaVersion": 1,
     "displayName": "Man！花了这么多钱！",
-    "summary": "每轮结束弹出科比冰红茶人物，离线播报费用或Token用量；优先cost-meter，无则按公开单价估算。支持人民币/美元、二十句金额台词与四句Token台词。",
+    "summary": "每轮结束弹出科比冰红茶人物，离线播报费用或Token用量；按金额分四档情绪，常用金额整句播报。优先cost-meter，无则按公开单价估算。支持人民币/美元、两位小数向上取整、二十句金额台词与四句Token台词。",
     "categories": [
       "usage",
       "voice"

@@ -6,7 +6,7 @@
 
 - **随机台词**：金额模式二十句、Token 模式四句；自动提醒随机选一句，试听时也能逐句挑选。
 - **按金额分情绪**：四档语气，花得越多越兴奋；每档都重录了全部数字、单位和台词，不是只换一句壳。
-- **金额 / Token**：金额支持人民币、美元与三位小数四舍五入；Token 模式只报整数用量，不报钱。
+- **金额 / Token**：金额支持人民币、美元与两位小数向上取整；Token 模式只报整数用量，不报钱。
 - **纯离线语音**：台词与数字全部内置，不需要语音服务账户或 API Key。
 - **插件内设置**：在左侧插件详情页调整音量、探头位置、试听金额和句子。
 
@@ -18,7 +18,7 @@
 
 在 DSH 的插件页安装此插件，按提示重启 DSH 并刷新页面。打开左侧 **插件 → Man！花了这么多钱！**，在插件详情页调整提醒设置或点击 **试听**。
 
-安装时使用 npm 包名 **`dsh-man-report`**，发行版本见 [npm](https://www.npmjs.com/package/dsh-man-report) 和 [GitHub Releases](https://github.com/gongfpp/dsh-man-report/releases)；发布前也可以直接装本地目录。市场目录的审核与同步可能晚于发行包上线。旧包名 `dsh-man-031` 停在 0.8.0，不再更新。
+安装时使用 npm 包名 **`dsh-man-report`**，发行版本见 [npm](https://www.npmjs.com/package/dsh-man-report) 和 [GitHub Releases](https://github.com/gongfpp/dsh-man-report/releases)；发布前也可以直接装本地目录。市场目录的审核与同步可能晚于发行包上线。旧包名 `dsh-man-031` 停在 0.8.1，不再更新。
 
 [dsh-cost-meter](https://www.npmjs.com/package/dsh-cost-meter) 为可选：装了优先使用它的本轮计费结果；没装或查询失败时，按各次请求的模型、原生 Token 用量与公开单价分别计算后求和，标注 **“按公开价格估算 · 非实际扣款”**。Token 模式不查询价格。
 
@@ -70,6 +70,6 @@
 
 ## 许可
 
-插件源代码、脚本与文档以 [MIT 许可](LICENSE)发布。随包的第三人称素材不在该授权范围内：`assets/kobe.png`、`icon.png`、`docs/preview.png` 与 `assets/voices/` 仅随本插件作个人非商业使用，不单独再分发、转许可或出售，出处与限制见[第三方素材声明](THIRD-PARTY-NOTICES.md)。价格数据及其派生估算实现沿用 dsh-cost-meter 的 MIT 许可，原文见[价格数据许可](docs/PRICING-LICENSE.txt)。
+插件源代码、脚本与文档以 [MIT 许可](LICENSE)发布。随包的第三方素材不在该授权范围内：`assets/kobe.png`、`icon.png`、`docs/preview.png` 与 `assets/voices/` 仅随本插件作个人非商业使用，不单独再分发、转许可或出售，出处与限制见[第三方素材声明](THIRD-PARTY-NOTICES.md)。价格数据及其派生估算实现沿用 dsh-cost-meter 的 MIT 许可，原文见[价格数据许可](docs/PRICING-LICENSE.txt)。
 
 人物图为网络流传的科比冰红茶二创照片，本项目不持有也不主张该照片、科比肖像或其遗产、以及图中任何品牌的任何权利，也未取得相应许可。该素材仅为非官方同人内容，与本仓库、DSH 官方以及收录本插件的市场目录均无关，权利归各自权利人。权利人若提出异议，将移除该图并退回纯文字提示。

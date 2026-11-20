@@ -716,7 +716,7 @@ for (const costFailures of [0, 1]) {
 {
   let internals
   const window = { __ModuleLoader__: { load(def) { def.factory(() => React) } }, test: value => { internals = value } }
-  vm.runInNewContext(code.replace("  return { name: 'man-report'", "  window.test({ getAudioPlan, numberTokens, formatAmount, displayAmount, billingAmount, previewAmount, markSeen, memorySeen }); return { name: 'man-report'"), { window, Date, localStorage: { getItem: () => '{}', setItem() {} } })
+  vm.runInNewContext(code.replace("  return { name: 'man-report'", "  window.test({ getAudioPlan, numberTokens, formatAmount, displayAmount, billingAmount, markSeen, memorySeen }); return { name: 'man-report'"), { window, Date, localStorage: { getItem: () => '{}', setItem() {} } })
   const full = exactPilot(); full.amounts['CNY:0.31'].fullUtterance = true
   const fullPath = ['/api/man-report/voices/amounts/body-CNY-0.31.mp3']
   assert.deepEqual(Array.from(internals.getAudioPlan(full, .31, 'CNY', 'man-extended', 'round-cost')), fullPath, 'MAN, prefix, amount and suffix are already inside the full utterance')
@@ -748,7 +748,6 @@ for (const costFailures of [0, 1]) {
   assert.ok(internals.getAudioPlan(strict, .1 + .2, 'CNY').at(-1).endsWith('/body-CNY-0.3.mp3'), 'binary float noise never rounds 0.30 up to 0.31')
   strict.amounts['CNY:0.31'].phraseId = 'came-to'
   assert.equal(internals.getAudioPlan(strict, .31, 'CNY'), null, 'wrong phrase never reverts to present fragments')
-  assert.equal(internals.previewAmount(strict, 'CNY'), .32, 'preview probing skips null plans rather than treating them as playable')
   assert.equal(internals.displayAmount(.31004), '0.31004')
   assert.equal(internals.displayAmount(.1 + .2), '0.30000000000000004')
   assert.equal(internals.displayAmount(1.234567891e-8), '0.00000001234567891')

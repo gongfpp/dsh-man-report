@@ -147,19 +147,6 @@ window.__ModuleLoader__.load({ id: 'dsh-man-report', factory: require => {
       return `/api/man-report/voices/${path}`
     })
   }
-  function previewAmount(manifest, currency, fallback = .31) {
-    const amountText = displayAmount
-    if (manifest?.amounts?.[`${currency}:${amountText(fallback)}`] && getAudioPlan(manifest, fallback, currency)) return fallback
-    for (const key of Object.keys(manifest?.amounts ?? {})) {
-      if (!key.startsWith(`${currency}:`)) continue
-      const amount = Number(key.slice(currency.length + 1))
-      try {
-        if (`${currency}:${amountText(amount)}` !== key) continue
-        if (getAudioPlan(manifest, amount, currency)) return amount
-      } catch {}
-    }
-    return fallback
-  }
   async function json(url, signal) {
     const response = await fetch(url, { signal, cache: 'no-store' })
     if (!response.ok) throw new Error('network')

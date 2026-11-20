@@ -5,6 +5,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { homedir } from 'node:os'
 import { createHash, randomUUID } from 'node:crypto'
 import https from 'node:https'
 
@@ -20,7 +21,8 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex')
 
 function readKey() {
   if (process.env.DOUBAO_KEY) return process.env.DOUBAO_KEY
-  const text = readFileSync('C:/Users/mass/.dsh/.credentials.yaml', 'utf8').split(/\r?\n/)
+  const store = process.env.MAN_CREDENTIALS ?? join(homedir(), '.dsh', '.credentials.yaml')
+  const text = readFileSync(store, 'utf8').split(/\r?\n/)
   const at = text.findIndex(line => /^\s*dsh-man-031\/doubao\s*:/.test(line))
   if (at < 0) throw Error('CREDENTIAL_RECORD_NOT_FOUND')
   for (let i = at + 1; i < text.length; i++) {

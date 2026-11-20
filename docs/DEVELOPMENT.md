@@ -8,9 +8,9 @@ npm pack --dry-run
 
 ## 当前架构：仅离线素材播放
 
-0.5.0 移除了 0.4.0 的在线合成、凭据设置、每日额度、缓存服务和 `manReport_voice_prepare` 工具。最终用户不提供 Key；运行包不含语音云服务调用代码。开发时的生成脚本、调用台账与原始文件只保存在不发布的 scripts/dev 中。
+0.5.0 移除了 0.4.0 的在线合成、凭据设置、每日额度、缓存服务和 `manReport_voice_prepare` 工具。最终用户不提供 Key；运行包不含语音云服务调用代码。开发时的生成脚本、调用台账与原始文件只保存在不发布的 `dev/` 与 `scripts/` 中（`.gitignore` 排除 `dev/`）。
 
-0.9.0 起音库按情绪分四档：同一音色（`S_PneVZcKf2`）用四条不同表演指令分别重录全部 65 段台词（数字 0–19、整十数、point、hundred/thousand/million/billion、9 段开头、17 段结尾、5 个货币单位、`token-used`），共 260 段无损 WAV，合计约 18.7MB。`manifest.tierBands` 定义分档边界（金额 .02/.1/1，Token 1000/10000/100000），`manifest.tierOverrides` 保存 t1/t3/t4 每段台词的文件、SHA-256 与时长；t2 是 `manifest.clips` 里的默认集。`client.js` 的 `voiceTier(manifest, amount, mode)` 与 `clipFor(manifest, key, tier)` 决定整句使用哪一档，所以同一句里的前缀、数字和结尾永远来自同一档。
+0.9.0 起音库按情绪分四档：同一音色（`S_PneVZcKf2`）用四条不同表演指令分别重录全部 65 段台词（数字 0–19、整十数、point、hundred/thousand/million/billion、9 段开头、17 段结尾、5 个货币单位、`token-used`），共 260 段无损 WAV，合计约 17.2MB。`manifest.tierBands` 定义分档边界（金额 .02/.1/1，Token 1000/10000/100000），`manifest.tierOverrides` 保存 t1/t3/t4 每段台词的文件、SHA-256 与时长；t2 是 `manifest.clips` 里的默认集。`client.js` 的 `voiceTier(manifest, amount, mode)` 与 `clipFor(manifest, key, tier)` 决定整句使用哪一档，所以同一句里的前缀、数字和结尾永远来自同一档。
 
 0.9.0 起常用金额改用整句：`manifest.wholeSamples['<币种>:<金额>'][<句子ID>] = { file, sha256, duration, phraseId, fullUtterance: true }`，人民币与美元各 10 个金额（0.01/0.02/0.03/0.05/0.08/0.10/0.20/0.30/0.50/1.00）× 20 句 = 400 条连续整句录音（MP3 96kbps 单声道 24kHz）。`client.js` 的 `getAudioPlan` 先查整句，命中就整句播放、不再拼接；未覆盖的金额继续用四档片段组合。整句由 `build-whole-samples.mjs` 生成（外围静音裁切 + 50ms 余量、单条静态增益到活动帧 RMS -24.8dB、true-peak -2.2dB，不拼接、不变调、不变速），脚本按币种合并写入 `wholeSamples`（`MAN_BUILD=USD` 可只重建一套），素材与报告在 `dev/voice-bank-v4/`（人民币，免费体验页）与 `dev/voice-bank-v5/`（美元，付费公共 API）。金额显示与字幕同时改为两位小数向上取整（BigInt 进位），语音分词用同一结果。
 
@@ -50,4 +50,6 @@ npm pack --dry-run
 
 ## 更新与发布
 
-使用官方插件管理器更新，不手改 profile。以安装结果和真实接口确认宿主生效，刷新页面确认客户端。包内容仅保留运行资源、必要文档、图标和少量真实截图；不包含 dev、生成脚本、凭据、原始参考、旧运行时或旧 MiMo 音频。未获素材公开分发许可前保持 private，不自动推送 GitHub。
+使用官方插件管理器更新，不手改 profile。以安装结果和真实接口确认宿主生效，刷新页面确认客户端。包内容仅保留运行资源、必要文档、图标和少量真实截图；不包含 dev、生成脚本、凭据、原始参考、旧运行时或旧 MiMo 音频。
+
+1.0.0 起插件已公开发布（npm `dsh-man-report`、GitHub 仓库与 Releases），源代码按 MIT 发布；随包人物图、图标、预览图与离线语音不随 MIT 再分发，仅随插件个人非商用，详见 `LICENSE` 与 `THIRD-PARTY-NOTICES.md`。发布流程：`npm test` → `npm pack --dry-run` 核对包内文件 → 合并到 main 并推送 → `npm publish` → 创建同名 GitHub Release（附 tgz）→ 同步市场条目（Awesome / 1024store / Workshop 各自只改自己的条目文件，更新已收录条目时沿用原 PR）。已发布版本不可重发；发布前先确认 `package.json` 版本与 CHANGELOG 标题一致。

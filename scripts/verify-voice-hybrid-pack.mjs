@@ -44,7 +44,7 @@ export function verifyHybridVoicePack() {
   const baseline = resolve(root, publication.backupDirectory), old = json(resolve(baseline, 'manifest.json')); assert.equal(sha(resolve(baseline, 'manifest.json')), 'be08ee148edb840b8b734c8a019ed9edc1e07990c21ff3b725219629d09caa3d')
   for (const r of [...Object.values(old.clips), ...Object.values(old.amounts)]) assert.equal(sha(resolve(baseline, r.file)), r.sha256)
   // Execute the real client's pure planning functions, never a mocked implementation.
-  const client = readFileSync(resolve(root, 'client.js'), 'utf8'), start = client.indexOf('  function formatAmount('), end = client.indexOf('  function previewAmount('); assert.ok(start >= 0 && end > start)
+  const client = readFileSync(resolve(root, 'client.js'), 'utf8'), start = client.indexOf('  function formatAmount('), end = client.indexOf('  async function json('); assert.ok(start >= 0 && end > start)
   const context = {}; vm.createContext(context); vm.runInContext(client.slice(start, end) + '\nglobalThis.plan = getAudioPlan', context)
   for (const [currency, amount] of [['CNY', .31], ['USD', 1.27]]) for (const opener of m.openers) assert.deepEqual(Array.from(context.plan(m, amount, currency, opener, 'hybrid-jobs')), [`/api/man-report/voices/${m.clips[opener].file}`, `/api/man-report/voices/${m.amounts[`${currency}:${amount}`].file}`])
   for (const [currency, amount] of [['CNY', 0], ['USD', 0], ['CNY', .01], ['CNY', .31004], ['USD', .31], ['CNY', 1.27], ['USD', 1.27004], ['CNY', 1e-8]]) assert.equal(context.plan(m, amount, currency), null)

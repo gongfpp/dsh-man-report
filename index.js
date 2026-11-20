@@ -70,7 +70,7 @@ export async function apply(ctx) {
   serve('/api/man-report/kobe.png', await readFile(new URL('./assets/kobe.png', import.meta.url)), 'image/png')
 
   // Only files explicitly listed in the local manifest are exposed, never a directory route.
-  let manifest = { schemaVersion: 1, id: 'kobe-mimo-v1', status: 'unavailable', synthetic: true, clips: {}, amounts: {}, quality: { asrVerified: false, listeningVerified: false } }
+  let manifest = { schemaVersion: 1, id: 'kobe-mimo-v1', status: 'unavailable', synthetic: true, clips: {}, amounts: {} }
   try { manifest = JSON.parse(await readFile(new URL('./assets/voices/manifest.json', import.meta.url), 'utf8')) }
   catch (error) { if (error.code !== 'ENOENT') throw error }
   if (manifest.schemaVersion !== 1 || !manifest.clips || !manifest.amounts) throw new Error('Invalid man-report voice manifest')
