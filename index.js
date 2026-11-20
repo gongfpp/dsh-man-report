@@ -65,12 +65,12 @@ export async function apply(ctx) {
     init: initialState, apply: reduce,
     wire: { viewSchema: completion.nullable(), view: state => state.latest, summary: false },
   })
-  const register = (path, fetch, methods = ['GET']) => ctx.effect(() => ctx.connection.fetch.register({ path, methods, requestBody: 'buffered', fetch }))
+  const register = (path, fetch) => ctx.effect(() => ctx.connection.fetch.register({ path, methods: ['GET'], requestBody: 'buffered', fetch }))
   const serve = (path, bytes, type) => register(path, async () => new Response(bytes, { headers: { ...headers, 'content-type': type } }))
   serve('/api/man-report/kobe.png', await readFile(new URL('./assets/kobe.png', import.meta.url)), 'image/png')
 
   // Only files explicitly listed in the local manifest are exposed, never a directory route.
-  let manifest = { schemaVersion: 1, id: 'kobe-mimo-v1', status: 'unavailable', synthetic: true, clips: {}, amounts: {} }
+  let manifest = { schemaVersion: 1, id: 'man-report', status: 'unavailable', clips: {}, amounts: {} }
   try { manifest = JSON.parse(await readFile(new URL('./assets/voices/manifest.json', import.meta.url), 'utf8')) }
   catch (error) { if (error.code !== 'ENOENT') throw error }
   if (manifest.schemaVersion !== 1 || !manifest.clips || !manifest.amounts) throw new Error('Invalid man-report voice manifest')
@@ -105,7 +105,8 @@ export async function apply(ctx) {
     if (!turn || state.excluded) return json({ error: 'completion-not-found' }, 404)
     const usage = usageTotals(turn.samples, turn.incomplete ?? true)
     if (url.searchParams.get('mode') === 'tokens') return json({ ...unknown(currency, 'token-mode'), source: 'native-usage', usage })
-    const fallback = () => prices.quote(turn.samples ?? [], turn.incomplete ?? true, currency)
+    // Total fallback: an estimate that throws must still answer as unknown, never as a 500.
+    const fallback = () => { try { return prices.quote(turn.samples ?? [], turn.incomplete ?? true, currency) } catch { return unknown(currency, 'invalid-cost') } }
     const key = JSON.stringify([id, endSeq, currency]), cached = cache.get(key)
     if (cached && Date.now() - cached.time < 10_000) return json(cached.value)
     const meter = ctx.get('costMeter')
@@ -131,7 +132,7 @@ export async function apply(ctx) {
         finally { clearTimeout(timer) }
       })()
       pending.set(key, job)
-      void job.finally(() => { if (pending.get(key) === job) pending.delete(key) })
+      void job.finally(() => { if (pending.get(key) === job) pending.delete(key) }).catch(() => {})
     }
     return json(await pending.get(key))
   }

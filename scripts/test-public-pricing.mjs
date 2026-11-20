@@ -41,9 +41,60 @@ let result=await request('&mode=tokens');assert.equal(meterCalls,0);assert.equal
 result=await request();assert.equal(result.source,'public-pricing');assert.equal(result.status,'estimated');assert.equal(meterCalls,1)
 meter=undefined;result=await request();assert.equal(result.source,'public-pricing');assert.equal(result.usage.available,true)
 meter={getTurnCost:async()=>({found:true,apiCost:0,calls:[{apiCost:0,plan:true}]})};result=await request('','CNY');assert.equal(result.source,'cost-meter');assert.equal(result.status,'plan');assert.equal(result.amount,0)
+const tooLong=await routes.get('/api/man-report/cost').fetch(new Request('https://local/api/man-report/cost?sessionId='+'x'.repeat(513)+'&endSeq=5&currency=CNY'));assert.equal(tooLong.status,400,'sessionId is capped at 512 chars')
 await Promise.all(effects.map(f=>f()))
 let fetches=0
 const store=createPriceStore({fetchImpl:async()=>{fetches++;throw Error('offline')}});await store.init()
 assert.equal(store.quote([row],false,'USD').amount,.0033);assert.equal(store.quote([row],false,'USD').amount,.0033)
 await store.dispose();assert.equal(fetches,2,'one bounded price + FX background attempt, never per-turn networking')
+// A sample can predate the request event that carries provider/model; it must degrade, not throw.
+assert.equal(estimate([{...row,provider:undefined}],false,table,'USD').status,'unknown')
+assert.equal(estimate([{...row,model:undefined}],false,table,'USD').status,'unknown')
+// A reshaped published row makes the raw calculator throw; quote() must answer unknown instead.
+const broken={generatedAt:'2026-01-01',fx:{CNY:7},providers:{openai:{models:{'gpt-6.1-sol':{input:1,output:1,rateHistory:{}}}}}}
+assert.throws(()=>estimate([row],false,broken,'USD'),'raw estimate surfaces a malformed table')
+const guarded=createPriceStore({table:broken,fetchImpl:async()=>{throw Error('offline')}});await guarded.init()
+const guardedQuote=guarded.quote([row],false,'USD')
+assert.equal(guardedQuote.status,'unknown');assert.equal(guardedQuote.reason,'invalid-cost');assert.equal(guardedQuote.source,'public-pricing')
+await guarded.dispose()
+const encoder=new TextEncoder()
+const reply=payload=>({ok:true,body:(async function*(){yield encoder.encode(JSON.stringify(payload))})()})
+const remote={generatedAt:'2026-11-20',providers:{deepseek:{models:{'deepseek-v4-flash':{input:9,output:9,cacheHit:9}}},extra:{models:{'brand-new':{input:1,output:1}}}}}
+const cnyRow={...row,provider:'deepseek',model:'deepseek-v4-flash-vision-exp',cacheWrite:0}
+let clock=Date.parse('2026-11-21T00:00:00Z'),calls=0
+const refreshing=createPriceStore({now:()=>clock,fetchImpl:async url=>{calls++;return reply(String(url).includes('provider-pricing')?remote:{result:'success',rates:{CNY:7.5}})}})
+await refreshing.init()
+const cnyBefore=refreshing.quote([cnyRow],false,'CNY')
+await new Promise(resolve=>setTimeout(resolve,30))
+const cnyAfter=refreshing.quote([cnyRow],false,'CNY')
+assert.equal(cnyBefore.status,'estimated')
+assert.equal(cnyAfter.status,'estimated','bundled cnyModels survive the refresh merge')
+close(cnyAfter.amount,cnyBefore.amount)
+assert.equal(cnyAfter.priceDate,'2026-11-20');assert.equal(cnyAfter.fxDate,new Date(clock).toISOString().slice(0,10))
+await refreshing.dispose()
+// A malformed published row is rejected instead of entering the table.
+clock=Date.parse('2026-11-21T00:00:00Z')
+const badRemote={generatedAt:'2026-11-20',providers:{openai:{models:{'gpt-6.1-sol':{input:1,output:1,rateHistory:{}}}}}}
+const rejecting=createPriceStore({now:()=>clock,fetchImpl:async url=>reply(String(url).includes('provider-pricing')?badRemote:{result:'success',rates:{CNY:7.2}})})
+await rejecting.init()
+rejecting.quote([row],false,'USD')
+await new Promise(resolve=>setTimeout(resolve,30))
+const kept=rejecting.quote([row],false,'USD')
+assert.equal(kept.status,'estimated');close(kept.amount,.0033);assert.equal(kept.priceDate,table.generatedAt)
+await rejecting.dispose()
+// A failed refresh retries within the hour instead of pinning the stale snapshot for a day.
+clock=Date.parse('2026-11-21T00:00:00Z');calls=0
+const retrying=createPriceStore({now:()=>clock,fetchImpl:async()=>{calls++;throw Error('offline')}})
+await retrying.init()
+retrying.quote([row],false,'USD')
+await new Promise(resolve=>setTimeout(resolve,30))
+assert.equal(calls,2,'one bounded price + FX attempt')
+retrying.quote([row],false,'USD')
+await new Promise(resolve=>setTimeout(resolve,30))
+assert.equal(calls,2,'no retry storm inside the backoff window')
+clock+=61*60_000
+retrying.quote([row],false,'USD')
+await new Promise(resolve=>setTimeout(resolve,30))
+assert.equal(calls,4,'a failed refresh retries after the one-hour backoff')
+await retrying.dispose()
 console.log('public pricing: passed (native projection, per-request models/long context/cache/peak/FX, duplicate/unknown safeguards, token bypass, meter-first/fallback and offline snapshot)')

@@ -245,7 +245,8 @@ window.__ModuleLoader__.load({ id: 'dsh-man-report', factory: require => {
       }, [popup])
       const prefsRef = useRef(prefs), sessionRef = useRef(sessionId), popupRef = useRef(null), alive = useRef(false)
       const timer = useRef(null), ticket = useRef(0), audio = useRef(null), sources = useRef([]), playAbort = useRef(null), pending = useRef(null), cancelLoad = useRef(() => {})
-      prefsRef.current = prefs; sessionRef.current = sessionId
+      // Refs mirror the latest props for async callbacks; effects keep render pure.
+      React.useEffect(() => { prefsRef.current = prefs; sessionRef.current = sessionId }, [prefs, sessionId])
       const locale = useSyncExternalStore(React.useCallback(fn => ctx.locale.subscribe(fn), []), React.useCallback(() => ctx.locale.getSnapshot(), []))
       const zh = /^zh/i.test(locale.active)
       function stop() {
@@ -436,24 +437,25 @@ window.__ModuleLoader__.load({ id: 'dsh-man-report', factory: require => {
         : popup?.cost.status === 'plan' ? (zh ? `套餐无额外扣费 · 0.00${popup.cost.currency === 'USD' ? '美元' : '元'}` : `No additional plan charge · 0.00 ${popup.cost.currency === 'USD' ? 'dollars' : 'yuan'}`) : (zh ? '费用暂不可用' : 'Cost unavailable')
       const errorText = { permission: zh ? '允许播放 · 重试' : 'Allow audio · Retry', network: zh ? '音频网络失败 · 重试' : 'Audio network error · Retry', decode: zh ? '音频解码失败 · 重试' : 'Audio decode error · Retry', candidate: zh ? '候选声线 · 点击试听' : 'Candidate voice · Preview', unavailable: zh ? '声线尚未就绪 · 重试' : 'Voice unavailable · Retry', 'missing-sample': zh ? '暂无这个金额的整段语音 · 重试' : 'No full voice for this amount · Retry' }
       return h('div', { className: 'manReport', 'data-plugin': 'man-report' }, h('style', null, CSS),
-        popup && h('div', { ref: popupElement, popover: popup.preview ? 'manual' : undefined, className: 'manReport-peek', 'data-side': prefs.side, role: 'status', 'aria-live': 'polite' },
+        popup && h('div', { ref: popupElement, popover: popup.preview ? 'manual' : undefined, className: 'manReport-peek', 'data-side': prefs.side },
           h('img', { src: '/api/man-report/kobe.png', alt: '', draggable: false }),
-          h('div', { className: 'manReport-line' }, message,
+          h('div', { className: 'manReport-line', role: 'status', 'aria-live': 'polite' }, message,
             h('small', null, popup.preview ? (popup.mode === 'tokens' ? (zh ? '试听示例 · 非本轮用量' : 'Preview · not this turn’s usage') : (zh ? '试听示例 · 非本轮费用' : 'Preview · not this turn’s cost')) : popup.mode === 'tokens' ? (zh ? '本轮主会话 · 输入＋输出＋缓存，推理不重复计数' : 'Main session · input + output + cache; reasoning included') : popup.cost.source === 'public-pricing' && popup.cost.status === 'estimated' ? (zh ? '按公开价格估算 · 非实际扣款' : 'Public-price estimate · not actual billing') : popup.cost.status === 'estimated' ? (zh ? '本轮主会话 · 花费估算' : 'Main session · estimated cost') : null)),
           h('button', { className: 'manReport-close', onClick: dismiss, 'aria-label': zh ? '关闭' : 'Dismiss' }, '×'),
           error && h('button', { className: 'manReport-retry', onClick: () => void play(popup, true) }, errorText[error])),
         costRetry && h('button', { className: 'manReport-cost-retry', onClick: costRetry.retry, disabled: costRetry.loading, 'aria-live': 'polite' }, costRetry.loading ? (zh ? '正在查询本轮用量…' : 'Loading turn usage…') : (zh ? '本轮用量查询失败 · 重试' : 'Turn usage request failed · Retry')))
     }
     class Boundary extends React.Component {
-      constructor(props) { super(props); this.state = { error: null } }
+      constructor(props) { super(props); this.state = { error: null, dismissed: false } }
       static getDerivedStateFromError(error) {
         const message = String(error?.message || 'Client unavailable').replace(/(?:Bearer\s+|sk-)[A-Za-z0-9_.-]+/gi, '[redacted]').replace(/https?:\/\/\S+/g, '[url]').slice(0, 160)
-        return { error: message }
+        return { error: message, dismissed: false }
       }
       render() {
-        if (!this.state.error) return this.props.children
+        // The overlay is optional: a dismissed banner must not keep retrying the same render.
+        if (!this.state.error || this.state.dismissed) return this.state.error ? null : this.props.children
         return h('div', { 'data-manReport-error': true, role: 'status', style: { position: 'fixed', bottom: 12, right: 12, maxWidth: 240, padding: 8, borderRadius: 8, zIndex: 91, pointerEvents: 'auto', background: 'var(--dsw-alias-bg-overlay)', color: 'var(--dsw-alias-label-primary)', fontSize: 12 } },
-          h('div', null, 'Man · ', this.state.error), h('button', { onClick: () => this.setState({ error: null }), style: { background: 'var(--dsw-alias-bg-layer-1)', color: 'var(--dsw-alias-label-primary)', border: '1px solid var(--dsw-alias-border-l1)', borderRadius: 6, padding: '5px 8px', font: 'inherit' } }, '重试 / Retry'))
+          h('div', null, 'Man · ', this.state.error), h('button', { onClick: () => this.setState({ dismissed: true }), style: { background: 'var(--dsw-alias-bg-layer-1)', color: 'var(--dsw-alias-label-primary)', border: '1px solid var(--dsw-alias-border-l1)', borderRadius: 6, padding: '5px 8px', font: 'inherit' } }, '关闭 / Dismiss'))
       }
     }
     const SafeOverlay = props => h(Boundary, null, h(Overlay, props))
