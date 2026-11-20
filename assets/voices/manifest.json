@@ -860,7 +860,7 @@
     "runtimeGeneration": false,
     "tierClipsHumanReviewed": false
   },
-  "notes": "Numbers are cut from one continuous recital take per emotion tier (same clone, same instruction), so neighbouring fragments share pitch and tempo; prefixes, units and endings keep the per-clip recordings. Tier 2 is the default set stored in clips; tierOverrides holds t1/t3/t4. Money tiers follow the two-decimal ceiling of the caption (t1 <0.02, t2 <0.10, t3 <1, t4 above). wholeSamples holds 200 whole-sentence takes (20 phrases x 10 covered CNY amounts) that replace the splice whenever the round lands on exactly one of those amounts.",
+  "notes": "Numbers are cut from one continuous recital take per emotion tier (same clone, same instruction), so neighbouring fragments share pitch and tempo; prefixes, units and endings keep the per-clip recordings. Tier 2 is the default set stored in clips; tierOverrides holds t1/t3/t4. Money tiers follow the two-decimal ceiling of the caption (t1 <0.02, t2 <0.10, t3 <1, t4 above). wholeSamples holds 400 whole-sentence takes (20 phrases x 10 covered amounts x CNY/USD) that replace the splice whenever the round lands on exactly one of those amounts in that currency.",
   "units": {
     "CNY": "unit-yuan",
     "USD": "unit-dollars",
@@ -4154,21 +4154,1445 @@
         "phraseId": "clock",
         "fullUtterance": true
       }
+    },
+    "USD:0.01": {
+      "round-next": {
+        "file": "amounts/USD-0p01-round-next.mp3",
+        "sha256": "4ef6ac9e118149544d505addb031431caa936d349077acff2244c0ea532e2860",
+        "duration": 6.72,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p01-back-work.mp3",
+        "sha256": "8fa313bc5afebdb6dacc5c05afded40f9126fd0c9af62d20b5252c81dc8fda50",
+        "duration": 3.2,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p01-make-count.mp3",
+        "sha256": "55a4885f72b72a261c60c93094bb70279da4a2af8be27e5332cef2ada1e9a9c5",
+        "duration": 6.08,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p01-jobs.mp3",
+        "sha256": "e39b09c48a155118f7d54557c6be808849c968083ba7474471e18aa46aa7959d",
+        "duration": 4.74,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p01-wanted.mp3",
+        "sha256": "1ef9f23f25f15afbe199fee93177b43ab89ba5403687cc779bd4720ceb3116d8",
+        "duration": 5.64,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p01-locked.mp3",
+        "sha256": "8395ac3c6cf442b64d9701325941844b76baacc4691f6b0a34e8767d5bc48423",
+        "duration": 5.51,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p01-pass.mp3",
+        "sha256": "ffa5fe4601c44151601f26f3bbfd8b867c607f7fffcbca92942b8d874322cd02",
+        "duration": 8.59,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p01-breath.mp3",
+        "sha256": "d853897154c4c3cc6530cb7c144dc24a0027d39907f08f324ed514b27ee88f5f",
+        "duration": 5.51,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p01-going.mp3",
+        "sha256": "91f1ca36235b2a08ba56303e64a3a334d5f2b58d3c7f756a161062d92742d1c2",
+        "duration": 6.1,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p01-out.mp3",
+        "sha256": "ac6e46123cb13b46ccab04450519041edef732265bb5e5b631a030c305c3f5aa",
+        "duration": 6.432,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p01-next-play.mp3",
+        "sha256": "4ba32d48f020fc8e92434534aac249b8a89c3f25043a58275569a099125f9c97",
+        "duration": 6.48,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p01-far-stop.mp3",
+        "sha256": "21f1c988ab037056e3e1fb594a23dfb1a25fb611addc53d105f45ec8f20024df",
+        "duration": 4.28,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p01-showed.mp3",
+        "sha256": "48c8bc4c2ec2fa639f6e8847337d8dc320feb652854905d7920721a8dc040ed7",
+        "duration": 6.63,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p01-worth.mp3",
+        "sha256": "3cf0acd173542debec9d81c9cf86eba7046749ec611418ce697f8cd957d609a1",
+        "duration": 4.08,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p01-eyes.mp3",
+        "sha256": "30a55d587cfbb343fcc736e360debc3cfeaac4610af462f08b97a1c1bf78dfe1",
+        "duration": 6.024,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p01-rep.mp3",
+        "sha256": "124345388893efd5adb119e4734784be770d13f18040845f93ef066b10d5ebe0",
+        "duration": 3.45,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p01-receipt.mp3",
+        "sha256": "abba030c88dfd281d50f8c5aafd55de5c35a7153454e47947fd4f1540af9dcb2",
+        "duration": 4.82,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p01-shortcuts.mp3",
+        "sha256": "9e2daa6e972350ca7951c7a0f6155e7fe33390e37d847cee3527d46fdd4c6fae",
+        "duration": 5.2,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p01-mission.mp3",
+        "sha256": "13e40f6e85b8d9c5bdc3777b1086766bcc352379e524a1ac22857b3360f2a59b",
+        "duration": 4.4,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p01-clock.mp3",
+        "sha256": "4baaeb15829a3b90c3d293504bdfeaaea49ceec4ce83f8b6cae3034e8b796f07",
+        "duration": 3.26,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.02": {
+      "round-next": {
+        "file": "amounts/USD-0p02-round-next.mp3",
+        "sha256": "6db0d773a159dfbd4da820ca69b648406db9463bcdce6c83153585fb6597809e",
+        "duration": 7.056,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p02-back-work.mp3",
+        "sha256": "cef2443a456f0d41ff7950d6fdc556382483ced9b824d4e79acac522bcb2f6a8",
+        "duration": 4.44,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p02-make-count.mp3",
+        "sha256": "87fb9d5d82f07dc78eb417e76270e189e7130168f10629f9b607e64858a033db",
+        "duration": 5.94,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p02-jobs.mp3",
+        "sha256": "21b9b744f4bfc10667d922bd7a1ba6564eee158fd1204deb67fe5c8bff4cf42b",
+        "duration": 4.82,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p02-wanted.mp3",
+        "sha256": "2914480561529b9fffd32c3124983bfa917bb4e91a2eccfce48afd085ef83ca1",
+        "duration": 6.29,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p02-locked.mp3",
+        "sha256": "61e0fff42fc1bf735804d962dab491f73edd0cdc1f80a1d16c8d3fc05d413346",
+        "duration": 5.54,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p02-pass.mp3",
+        "sha256": "4ddc2c8c35537304b80724a2c508041f0a861fd4ef7d3fc06aae9827de8ac03c",
+        "duration": 6.9,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p02-breath.mp3",
+        "sha256": "f9e6c686ac4480545031f5e0da6bdc87d95473df88ce652926ea6e3953911d46",
+        "duration": 5.38,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p02-going.mp3",
+        "sha256": "db5196a2ef77586b0f0c235fb253ad27e084b04b3529ec0cb888731bababea8a",
+        "duration": 5.61,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p02-out.mp3",
+        "sha256": "34a4c4e20077ecfa832afe55dc63f397c959d7513e524d3646ee8446e67b8292",
+        "duration": 6.292,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p02-next-play.mp3",
+        "sha256": "adcce97cf78f51109aaa761e3cbb56eaedfec0d96b018b51efc6577086d1d6f1",
+        "duration": 7.47,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p02-far-stop.mp3",
+        "sha256": "c1ee4d8db4933be03bd001f1a11a9cab9791b3cf92bd107df9880bd8c0ec442f",
+        "duration": 4.56,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p02-showed.mp3",
+        "sha256": "003ebe499b8122a4181929e3034beb12bd147423dfb51766478819099b3be5c9",
+        "duration": 6.29,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p02-worth.mp3",
+        "sha256": "3d920975c6357c3f3726a57ff6a578a693f7376da5d8d4eefa2a706503684d5c",
+        "duration": 3.19,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p02-eyes.mp3",
+        "sha256": "f8fcf77ed49a2a23d17ba4fab9790be9d88f86419b61416d1bbfc720425e0566",
+        "duration": 5.37,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p02-rep.mp3",
+        "sha256": "3b692875b4c8006352c6b29a7c096176e599e5e5cc1414d4f3677cbf9315a10d",
+        "duration": 4.25,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p02-receipt.mp3",
+        "sha256": "c81c637f281bbcc87b8562a00bd72c1b2bd925cb9b30005b649a7ac39d511ea7",
+        "duration": 4.62,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p02-shortcuts.mp3",
+        "sha256": "4a7ae346610877826eacf26d3b4ee18c153472433914f8992be06b9f1a12b3c0",
+        "duration": 7.38,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p02-mission.mp3",
+        "sha256": "3f192f4eb5611e3ac4dfcdec9b7cf73818adb0e2dff75a7dfeaebf60728e999e",
+        "duration": 5.15,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p02-clock.mp3",
+        "sha256": "62368dfdeccc94262b09fb25d835e7b5c4d4324545d62ad33c0ed9dffdb4809e",
+        "duration": 4.33,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.03": {
+      "round-next": {
+        "file": "amounts/USD-0p03-round-next.mp3",
+        "sha256": "bffdb7009f434e0461f40ac4bb100da4d11c941dffd2bc182091346d1be9146c",
+        "duration": 6.55,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p03-back-work.mp3",
+        "sha256": "4584ef538201538f14ffcf32c0734008be10eaff096225efe15a1d5b7702fcfe",
+        "duration": 5.02,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p03-make-count.mp3",
+        "sha256": "9557800574b41b1696430322b43e6538bf5b54d3146f2500fec3b731ee7d8fce",
+        "duration": 5.39,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p03-jobs.mp3",
+        "sha256": "7291b0aac98e092ea121763304a79cc58fa88ae46504beef75aedf715598957d",
+        "duration": 4.55,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p03-wanted.mp3",
+        "sha256": "0098c72c1c939a39731fe3a103dcaef5a2a54ddc592b94049a5f115c5a33f59d",
+        "duration": 5.54,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p03-locked.mp3",
+        "sha256": "93da9d716a4f36e9700d2a57b898c31e520243e0cc97f228473eb3b40d9c05f0",
+        "duration": 5.07,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p03-pass.mp3",
+        "sha256": "0b561957eeca31f32a5f0e6c8de265193b79b20dd69debee4e45730e47952280",
+        "duration": 7.6,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p03-breath.mp3",
+        "sha256": "181a648993efc65e65acf8d3f3636ccf7e836d343fabb05e58e01e44e9e112f0",
+        "duration": 5.24,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p03-going.mp3",
+        "sha256": "4240babb7cbc5c882c8a6fefbf0a898a86259bec5fe2da715c78e741b31526ba",
+        "duration": 4.68,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p03-out.mp3",
+        "sha256": "10b20eef96695c7cb9e2e6d1bcd52a42cac91c8a6b9ee7048a2a44418f55eff2",
+        "duration": 6.024,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p03-next-play.mp3",
+        "sha256": "978babef378f1bd9146b19b09762b87e267b0c28da744823c48ff81e90bd363d",
+        "duration": 6.74,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p03-far-stop.mp3",
+        "sha256": "465d485184d752cc4df3e658cc2596ee0033b7ba75aa57c576f50f0433004174",
+        "duration": 3.94,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p03-showed.mp3",
+        "sha256": "0d61d34c2f8a80c5864c8b932ca33191b8da088b3e9c5926b6d03cd7e9624ef9",
+        "duration": 7.12,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p03-worth.mp3",
+        "sha256": "b34eacf4571b104625a61f122375027ac5689cf38c6516b64031b11f63a3ae45",
+        "duration": 3.76,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p03-eyes.mp3",
+        "sha256": "2d25b22684d388d75af66fe673f6a2a2e7554fb0cb82015eb55f70307157bc84",
+        "duration": 5.4,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p03-rep.mp3",
+        "sha256": "c383e0e295bd4cec1259d7e429ea3aade7c03150689e37e6e3f66a57a3acf064",
+        "duration": 5.14,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p03-receipt.mp3",
+        "sha256": "48fbf0ec4290e9f088eb010c62d939d02267b711807721ab72275bd974f6de86",
+        "duration": 4.9,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p03-shortcuts.mp3",
+        "sha256": "8b4fd658ce36baca591df7bd15b9f85a5044deb5357a8bc0ee20f6c24d4285e1",
+        "duration": 5.41,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p03-mission.mp3",
+        "sha256": "eda3ef7d923e579797687571703437f2a10d43c44bc87fbcb60ed277b61ce2e7",
+        "duration": 4.38,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p03-clock.mp3",
+        "sha256": "e063d823488e07cf4656dfbf6ef3ac2294f773d35b6dd03b326c6bf7ecf93adb",
+        "duration": 4.04,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.05": {
+      "round-next": {
+        "file": "amounts/USD-0p05-round-next.mp3",
+        "sha256": "b5e313a98570789a8fc43163b9df6cd8fea4021c3b024869227c9b1cf8b2aa58",
+        "duration": 7.13,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p05-back-work.mp3",
+        "sha256": "9ceee74e27a071481bb90d3f9d2fdbe4b1558ebf29c5750addfa301215c98faf",
+        "duration": 4.36,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p05-make-count.mp3",
+        "sha256": "1a322732461589dab43b8fc2deb7434820ae6c46043ffdaa4146bd54e8e21ba4",
+        "duration": 4.38,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p05-jobs.mp3",
+        "sha256": "66b0bb0a9be0d31f13b9c6a5fd6eed1d0fa8a5ff9341d6058530e06a68c18e80",
+        "duration": 4.48,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p05-wanted.mp3",
+        "sha256": "aae46ec6fb52175e7b07a1447906ce111f8dd9fd80a9c3816d357ed94aa07288",
+        "duration": 5.022,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p05-locked.mp3",
+        "sha256": "362271ba213e26f5f7d0353f6aa318de8e29e6ecf1694a33ffa6a83dce5fa41b",
+        "duration": 4.96,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p05-pass.mp3",
+        "sha256": "e79017bb1bc1ed3caeedb372c7ad03751fe430c25b5c821df53c1de4f41dccb3",
+        "duration": 7.94,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p05-breath.mp3",
+        "sha256": "ae4c522d5a7d611705f7016247004ddb13f01ee3bc33933f3246ff87ba5f4642",
+        "duration": 5.02,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p05-going.mp3",
+        "sha256": "38840e03ccc89096966df8fc633712d752595bcd70d2fb10f22b3a4430114184",
+        "duration": 6.8,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p05-out.mp3",
+        "sha256": "fc134283dec739f2b5ac52b139e2a83fbcf3d494745b2aa4a42ee0993d6967cf",
+        "duration": 6.74,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p05-next-play.mp3",
+        "sha256": "de85d211f3af822d19946981a58e90cb3fa042d54e015465ca57f600de0be8ad",
+        "duration": 6.328,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p05-far-stop.mp3",
+        "sha256": "9f83a7936c2811a2d964aa186df6efadd3159631683765e8226ab4b39f92bdf4",
+        "duration": 5.03,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p05-showed.mp3",
+        "sha256": "4563e47fffef4693ca742d64d6622f51218a936d762ee8b132040f05413100d2",
+        "duration": 6.82,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p05-worth.mp3",
+        "sha256": "db910f93611243f7868c711f849f52b2b1407ff7e0549b20f072009872b90f28",
+        "duration": 4.59,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p05-eyes.mp3",
+        "sha256": "3ad6147559b79f4285d8b56a3c03ac3caa820b4c82e83d22dfe9ca051b3f9bc7",
+        "duration": 6.024,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p05-rep.mp3",
+        "sha256": "53a3715e5528e95bd43d686e2c895b13ba38dc4a93b70acda8abc62fd172ca06",
+        "duration": 4.33,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p05-receipt.mp3",
+        "sha256": "9cadeb54f67dcc0583cc6cd964c6a365dd48ee95f8b8268a815147223f718785",
+        "duration": 5.87,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p05-shortcuts.mp3",
+        "sha256": "7af483035e7b188cfb1ed4f9775b6e1ef621a5902cbae284e55c69aa74549896",
+        "duration": 6.28,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p05-mission.mp3",
+        "sha256": "672ee60b626f2360823df8a596fe49f4a40cb686aa713d67d9749183a02ca320",
+        "duration": 4.46,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p05-clock.mp3",
+        "sha256": "10df2e026ad199ae4ff1703d07459567920297f9826e17c4bed8416a048810aa",
+        "duration": 3.88,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.08": {
+      "round-next": {
+        "file": "amounts/USD-0p08-round-next.mp3",
+        "sha256": "a033e52a372aaa4cab06b51d7d848fc2929dfe79c5736d342e87a57e116eac58",
+        "duration": 7.224,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p08-back-work.mp3",
+        "sha256": "610f688a6a6314c27f24b10e2b3d5a01b01fafcbc8c0037b2f95b2c22889a868",
+        "duration": 4.824,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p08-make-count.mp3",
+        "sha256": "cf3205e5225b28d85c7e0f84c4c1b45a26cad2523f213b1007262387b2389a5c",
+        "duration": 6.54,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p08-jobs.mp3",
+        "sha256": "e418443cd4848f47dc55341ada5831cab09dcc417a47ed17349fc786d5e1cf34",
+        "duration": 4.36,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p08-wanted.mp3",
+        "sha256": "8a7dae40c8cc9592768890a472862400531bb4d91e681e841d4cc84abbf3dc03",
+        "duration": 5.466,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p08-locked.mp3",
+        "sha256": "0288fc48f53015d2b24531198b24c9908ddfda4a477164698dc76101a4e686f1",
+        "duration": 5.496,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p08-pass.mp3",
+        "sha256": "764200121547d6df2610bdf074d487fef46dbf92c933d50e28d044856acfce16",
+        "duration": 7.1,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p08-breath.mp3",
+        "sha256": "9de1724d66d1ddcff298a570342d0cc004d8133c324562d729df7d97e9174fae",
+        "duration": 5.44,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p08-going.mp3",
+        "sha256": "2900d39e0954c4025fe6b3497f2644136ba03eea3fa7ac3ad684de5eecf13719",
+        "duration": 5.73,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p08-out.mp3",
+        "sha256": "5639d2c3e1b4000d6b239f56f1fde24d43b587f1ca7efebda3a53be8d1ce4aa5",
+        "duration": 6.432,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p08-next-play.mp3",
+        "sha256": "e998128a25c0998b8cd8845919efd11e9075e33427e5ddbd551bac961e08a035",
+        "duration": 6.696,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p08-far-stop.mp3",
+        "sha256": "e87c1922a97499da5d2757bdb5469d727413dc93ad7e0b6d3753d066cfe3c8c7",
+        "duration": 4.9,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p08-showed.mp3",
+        "sha256": "9f21dec6b6f71e0016c75e5b62a68dea25c95e48dc9b4d3c30e92d141e0febe0",
+        "duration": 7.46,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p08-worth.mp3",
+        "sha256": "27293544d45544da86adaf19c432dbd310188144a118c9dfffdeef9048581463",
+        "duration": 3.472,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p08-eyes.mp3",
+        "sha256": "29f0445752f3ebb9596464467d520f9ec162e173d896e521dc8e7931bf2f6f03",
+        "duration": 6.28,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p08-rep.mp3",
+        "sha256": "64129f6d9484b25e1c5e960ab59ad29fedac2fed27df83b11db966643d53ed9e",
+        "duration": 4.55,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p08-receipt.mp3",
+        "sha256": "bec273e6dc859aa1677cc4d0784a55a19b8e749a0ea9c096e80966e5449de362",
+        "duration": 5.07,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p08-shortcuts.mp3",
+        "sha256": "9d8bc5794c41a3af425ebeba4b0e7a657f8e74f18a74dbe6691f8891657e7f0d",
+        "duration": 4.95,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p08-mission.mp3",
+        "sha256": "b339064dd76f705863516af86986f1a6efba74d204a3fbe3c519faf0ab632242",
+        "duration": 4.71,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p08-clock.mp3",
+        "sha256": "5f8dc64e2aa719826f0be35b0ba47f45edf6c8e140675844fddf84ec8c28ae21",
+        "duration": 5.06,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.1": {
+      "round-next": {
+        "file": "amounts/USD-0p10-round-next.mp3",
+        "sha256": "e57dbb61e7206d34b39349b443e124050f3f0881f55f054e1db39216f9d359cc",
+        "duration": 6.816,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p10-back-work.mp3",
+        "sha256": "9c3ebff8b7704966d616b3ab0c79654b9427f269d0a0344b093542ce52a45698",
+        "duration": 4.78,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p10-make-count.mp3",
+        "sha256": "a10006002e84963c9b87192a4ec157d5b6d57b5ca70131ac495f8f9b9b863472",
+        "duration": 6.49,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p10-jobs.mp3",
+        "sha256": "72787dda6d94299fd91954d5317ea699514bde969d986eb59ea752121e750d6a",
+        "duration": 3.92,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p10-wanted.mp3",
+        "sha256": "45f41021a593e08df56a374430ac5dc51800b54f48e1f0a340309f0827aeaa64",
+        "duration": 5.43,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p10-locked.mp3",
+        "sha256": "1e10ae59479b8ec485549832ab7489a588e59e23cc55f045cea2a5b5c628c61f",
+        "duration": 4.52,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p10-pass.mp3",
+        "sha256": "33a47d3721c348cc986695263892b9cf43b0497ece9a8aea4750a95a83fdfe43",
+        "duration": 8.02,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p10-breath.mp3",
+        "sha256": "42beda1abbe13751f583370e74f4f25cf28251443cdfb386038c7dfc952e42ba",
+        "duration": 6.31,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p10-going.mp3",
+        "sha256": "e90f0f1c7a5bc17f01e664c0f777c6551d3f34b3c6effb4136c66beec6cdda85",
+        "duration": 5.448,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p10-out.mp3",
+        "sha256": "decc42645b3ce1de74048ba0317708be14ecfd20612fd13171837425e107515c",
+        "duration": 6.884,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p10-next-play.mp3",
+        "sha256": "4e19ba49edd7d7966b7f08f4a7ebbd95fc993ebf9af9b8774d529b4230062728",
+        "duration": 6.12,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p10-far-stop.mp3",
+        "sha256": "cf5882340952baa22125615b9ec57eca3cbab5235f53c926b49220643fe7600d",
+        "duration": 4.91,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p10-showed.mp3",
+        "sha256": "09e8abdbac025551f2c6a1829d0f59546d9723791cc5e66ca56dacf43e2ef506",
+        "duration": 7.37,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p10-worth.mp3",
+        "sha256": "9692c7148130d0be7776cbee0a85f9c302a74fe554001600eb0e2e21fa9b5d86",
+        "duration": 4.18,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p10-eyes.mp3",
+        "sha256": "c27aab2a8352df85821e65854dbaefd136b8c631be2f411ba3a91cbe5719d06e",
+        "duration": 6.32,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p10-rep.mp3",
+        "sha256": "969fe45857094151f200cc8076e1ff52509e31ef6e2599f5adfb66db5a50b304",
+        "duration": 3.3,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p10-receipt.mp3",
+        "sha256": "51d30d278a1d5966a85bb5c792625876fcdbbc00d37d0395c50262102234416e",
+        "duration": 5.47,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p10-shortcuts.mp3",
+        "sha256": "5f54b2609f468ea68d5dfec541fab232a27603734f5536415585b0c12ec29ec3",
+        "duration": 5.68,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p10-mission.mp3",
+        "sha256": "4629474f145f1c6a85a8e6cb0b71b17753164be4abbfb80c29a72022c4f0ca50",
+        "duration": 5.01,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p10-clock.mp3",
+        "sha256": "78be0946e69659681a81aedafa935da02690da4908367a3dbebf80e7d8151f20",
+        "duration": 3.96,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.2": {
+      "round-next": {
+        "file": "amounts/USD-0p20-round-next.mp3",
+        "sha256": "b975a6dac3029791ddbd78d38810b78f5d142c0691bb9d58130148bd458d0fd3",
+        "duration": 6.024,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p20-back-work.mp3",
+        "sha256": "94c7675a4cad9b1c4a9959cd167e81878ba18b8a4afc634812d438c2f64d3482",
+        "duration": 4.27,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p20-make-count.mp3",
+        "sha256": "02f58adbe4ca99090c7097b29bef491f612a43fbdd83a509e0266a43b88fc9b7",
+        "duration": 5.68,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p20-jobs.mp3",
+        "sha256": "38f89d90436aace9d87344b9049a3ccc856e431ab351469d906cf79f1a83e1eb",
+        "duration": 5.04,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p20-wanted.mp3",
+        "sha256": "27df145991876bc1698c76448888ab1201a26332d6ef6a62901b15a0f50fa4f8",
+        "duration": 5.44,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p20-locked.mp3",
+        "sha256": "cf0041ab44394289b9fe566f17896c3117ead98c8626a43e33e9eff8b81bb747",
+        "duration": 4.97,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p20-pass.mp3",
+        "sha256": "9327c7d9c19282f5120de5ec52b8f6cc6b7dddccfa56e25e6d1d0dc8dbc15518",
+        "duration": 8.712,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p20-breath.mp3",
+        "sha256": "0105014d111bfba1d198df4d680f662c16d1eea4c38feb8951aedd3f0ab60070",
+        "duration": 4.72,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p20-going.mp3",
+        "sha256": "9a85fcebc92380ceff7d8f53e5b6e52f438dde609e4847e73c6343c0ce11f46a",
+        "duration": 5.22,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p20-out.mp3",
+        "sha256": "dcc76b7738695e348d94a3c7e3f56cd116b73337ab3e2ca5f611a27d1db1f2ad",
+        "duration": 7.218,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p20-next-play.mp3",
+        "sha256": "59d3346da261f05e7164e4716324769547dc8e419403d4c90167f590acee816d",
+        "duration": 6.25,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p20-far-stop.mp3",
+        "sha256": "f0454ba83d10630cb4d724587ab2cbfc7af3dfdb007e39442b0922845bf014b3",
+        "duration": 4.76,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p20-showed.mp3",
+        "sha256": "e1c4eb8ae28c54c786d293e67940b23fdef9176a21528a0e3933680ec8f0678c",
+        "duration": 6.54,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p20-worth.mp3",
+        "sha256": "a198f42a02f13ecbd27b9d30d3a91324dd6fbd691e1412bf3d02f7ba83ab28aa",
+        "duration": 3.91,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p20-eyes.mp3",
+        "sha256": "9803e96cf6856ac66d6f967f0468b3063f8178733edf68d8fce134f437bd8a7f",
+        "duration": 6.93,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p20-rep.mp3",
+        "sha256": "3affe9f3217c410e26da6d88b762345508a430ad6e3260ce2246d33747e1007e",
+        "duration": 4.04,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p20-receipt.mp3",
+        "sha256": "276ed23bf625e8a2638108ef02a6a1fc930560049ab236154401cdd0443bf4a7",
+        "duration": 4.71,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p20-shortcuts.mp3",
+        "sha256": "c4b8e111bf70186d15f769f82b1120e375995ba77cc6e7cdaf3d64a2245a5820",
+        "duration": 6.17,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p20-mission.mp3",
+        "sha256": "b465661d4c527e37d7e799a44e31aa31a20ed1dc837df2267d5280551ac7f47b",
+        "duration": 4.27,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p20-clock.mp3",
+        "sha256": "2414603379ca6cd13af90f341d269beb363d45dd5fe0681efb211f4828a9bee1",
+        "duration": 3.456,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.3": {
+      "round-next": {
+        "file": "amounts/USD-0p30-round-next.mp3",
+        "sha256": "c52d9498478f201cd1904e02fc3e5d522722660823871f77f1174d8dc6d9f3be",
+        "duration": 4.774,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p30-back-work.mp3",
+        "sha256": "537431288fa9c91ff153725704dd65e37edfda55717c5a730d8c0744afc4e36c",
+        "duration": 3.456,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p30-make-count.mp3",
+        "sha256": "e09752e1474653c2847af7edde9040e2ab258b64ef3ce21755a216d0705240e9",
+        "duration": 5.81,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p30-jobs.mp3",
+        "sha256": "d9fadb517cfec2e95e057bee9b32332786dd6fa6037515a07e59cf050c979b7a",
+        "duration": 4.42,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p30-wanted.mp3",
+        "sha256": "039e79ac9503e759a9c481503c3b14ffb5a31e2f99aa7274c7b3581cb9df39ec",
+        "duration": 5.32,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p30-locked.mp3",
+        "sha256": "b2493900832c761670d271fcf535da244b32687d2ce6c1b0edb0fde9111aabfc",
+        "duration": 5.26,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p30-pass.mp3",
+        "sha256": "b6d37c2be445a320509f8d3903a9ecbabaf7a403528b2eca1a14040e0f82c1ac",
+        "duration": 7.38,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p30-breath.mp3",
+        "sha256": "a498e35b84441e0e9cf30b0030aba893b62792d502c9719985639cff3ccc9171",
+        "duration": 5.89,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p30-going.mp3",
+        "sha256": "2b1b1d5e682234dce1fae90ebf390ebdae5f54b151a684faa4600401bd2fee3d",
+        "duration": 5.74,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p30-out.mp3",
+        "sha256": "9d4d0b5aaa73d26d04dd4d9371bc22aa6a78979a53441090ad438bd2ad7aedda",
+        "duration": 6.46,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p30-next-play.mp3",
+        "sha256": "b8993f346af6367687bed58774f3846f47394ad2f87de276ae1ba157c2124328",
+        "duration": 6.54,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p30-far-stop.mp3",
+        "sha256": "9353b84cc551343f3906b13c32c98f68c818188d7855cdc38d78ebbb680c2231",
+        "duration": 4.24,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p30-showed.mp3",
+        "sha256": "3021f35d35bbaf09cf3894b8337a31bdd6e807feb7d9b3d5aede332efb547578",
+        "duration": 6.7,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p30-worth.mp3",
+        "sha256": "7a5206418336868572777ff7464cbf14ebbe57174443526982947da6e53cab77",
+        "duration": 3.57,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p30-eyes.mp3",
+        "sha256": "f9f1acdff3e9b32f4146e429ed688a54855936f1f864f89bd7f6e6bc45268195",
+        "duration": 6.23,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p30-rep.mp3",
+        "sha256": "1fd450531942ef9e1862f63f25c8b4d7597f5446289843f6c6ace1d4c6da47b2",
+        "duration": 3.864,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p30-receipt.mp3",
+        "sha256": "e65948a23203a0483d5d085a438b6986a8ccc4cc922116bf36b417152c2bca1d",
+        "duration": 5.21,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p30-shortcuts.mp3",
+        "sha256": "cb14471cf2f43ede59fa9538df7b2764d46e1f810d3db77f6166c29037512219",
+        "duration": 4.85,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p30-mission.mp3",
+        "sha256": "91da12980db7b202efde471a2ce51cc0bf975af960f5ce673043b8ce4e0a0601",
+        "duration": 3.9,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p30-clock.mp3",
+        "sha256": "51ef2f4787c6969bfb5cbf960458a933a58b442c1202437eef9802be7a86482d",
+        "duration": 3.92,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:0.5": {
+      "round-next": {
+        "file": "amounts/USD-0p50-round-next.mp3",
+        "sha256": "f0ab74550cfd979b1ba1ff01112c00b7575e147a41869ff2188ee22370966990",
+        "duration": 6.264,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-0p50-back-work.mp3",
+        "sha256": "b696870978240bb61ba63540b167d390214db915b6b85625e8798bca7ead2793",
+        "duration": 4.35,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-0p50-make-count.mp3",
+        "sha256": "90a9a35a855b0155a9dee5e266e5278ad429ce24a49b37c8c0e798067eff757d",
+        "duration": 6.98,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-0p50-jobs.mp3",
+        "sha256": "d643633a8ec6e51572af11e2b97aa4e8a596428c9be7135b37afc906a7c06ab3",
+        "duration": 4.43,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-0p50-wanted.mp3",
+        "sha256": "5ce9492c989eb16da52cf341cac558d95c3f59f3b841ec445dc8b3832c142db9",
+        "duration": 5.98,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-0p50-locked.mp3",
+        "sha256": "89e8405e8fb587e6da9b1c6ca82bde7cf0feaf34c44a5291e8546cb8bbe3c0df",
+        "duration": 5.132,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-0p50-pass.mp3",
+        "sha256": "3b3e681cae0196406b184dabb0a72502d789fc87844753ddb4de49e8d32181cf",
+        "duration": 6.86,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-0p50-breath.mp3",
+        "sha256": "d7d9e90e5bd84463c108d2e4b8d268aea1f9d80e4f52ddcfcaaf137c9c48aca8",
+        "duration": 5.06,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-0p50-going.mp3",
+        "sha256": "125aec927ec94826cc60995469087473a2f00252ec2a86429652a3e41476211f",
+        "duration": 5.64,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-0p50-out.mp3",
+        "sha256": "2202d45ee5d55ce449fa95c2c243047faa97ace7107be2526c9d5c99fc3d0952",
+        "duration": 7.77,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-0p50-next-play.mp3",
+        "sha256": "214d72ee9a6e2e17fb8ab9ee126799fe46c5aef297b4ce4e792d50b5bee9bb78",
+        "duration": 7.248,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-0p50-far-stop.mp3",
+        "sha256": "7c6ee6592470a011bbc214d678bef2179ba6f3183ec822feeea20f2382e21a75",
+        "duration": 3.97,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-0p50-showed.mp3",
+        "sha256": "2cde6a63d94778ce6a64deecc1f8109e51290185346b65d6760262cc8a8ce78b",
+        "duration": 6.36,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-0p50-worth.mp3",
+        "sha256": "907747b422caec76412cc78f2fde527a2d7486a3c30b2e8480982af59fa59b95",
+        "duration": 4.89,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-0p50-eyes.mp3",
+        "sha256": "56343d68addc24c87837ac144114e02444f19e5b20c9bdedb346e97c2b3a04d4",
+        "duration": 5.944,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-0p50-rep.mp3",
+        "sha256": "3a22bb66413fba919d2ceb77ff4b516e76af2bdc1504e3b02e3825c4a34c9557",
+        "duration": 3.33,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-0p50-receipt.mp3",
+        "sha256": "4e583ab5ea6ae53b195316f3cae46400673be61675e5e2396691dec1adc379c4",
+        "duration": 4.91,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-0p50-shortcuts.mp3",
+        "sha256": "5b79eaf99edfe23357d585792a0c980ad3b00743a242e36b2f00a2e41f95df50",
+        "duration": 6.2,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-0p50-mission.mp3",
+        "sha256": "6a14670fb05f0a5ae2bc826c3feb277efabbe3c24c5cc6696e8062c950370a07",
+        "duration": 4.1,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-0p50-clock.mp3",
+        "sha256": "cf86672c717e7e5b5321040f39a2ee11dd6ccea63b9d6a6f4484359f83d818b6",
+        "duration": 3.68,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
+    },
+    "USD:1": {
+      "round-next": {
+        "file": "amounts/USD-1p00-round-next.mp3",
+        "sha256": "3ca9cdf8cb2069fbc6c55611b70183527a53cf5b2e007d67d69d702c98bf8362",
+        "duration": 8.08,
+        "phraseId": "round-next",
+        "fullUtterance": true
+      },
+      "back-work": {
+        "file": "amounts/USD-1p00-back-work.mp3",
+        "sha256": "f85ce1bef51d8be695e44ed9d45ac380085de6342acfcadf88d24c89bd534bbc",
+        "duration": 4.44,
+        "phraseId": "back-work",
+        "fullUtterance": true
+      },
+      "make-count": {
+        "file": "amounts/USD-1p00-make-count.mp3",
+        "sha256": "350ec430ce49633b8d47ee55a95024951761c5b6b072f3b2d90ed8f4ce4c37d9",
+        "duration": 4.79,
+        "phraseId": "make-count",
+        "fullUtterance": true
+      },
+      "jobs": {
+        "file": "amounts/USD-1p00-jobs.mp3",
+        "sha256": "41e0de35e5148f685a310169ae0bff4cd3512955348fad64cf3e396baa08e2c8",
+        "duration": 4.13,
+        "phraseId": "jobs",
+        "fullUtterance": true
+      },
+      "wanted": {
+        "file": "amounts/USD-1p00-wanted.mp3",
+        "sha256": "3ab96d0a9a832e6eef594db38cd5dc9f717ee17aa8710103489aa04a36687171",
+        "duration": 3.952,
+        "phraseId": "wanted",
+        "fullUtterance": true
+      },
+      "locked": {
+        "file": "amounts/USD-1p00-locked.mp3",
+        "sha256": "9b5b043f511c475cb7c4465a5f415ef43eaf51b15b3988c27437a5b8fcc2374c",
+        "duration": 3.916,
+        "phraseId": "locked",
+        "fullUtterance": true
+      },
+      "pass": {
+        "file": "amounts/USD-1p00-pass.mp3",
+        "sha256": "0f2ee0e9d3a16f200127b1a9713c236c7d162a46748532bff26c43964a1cedd1",
+        "duration": 6.91,
+        "phraseId": "pass",
+        "fullUtterance": true
+      },
+      "breath": {
+        "file": "amounts/USD-1p00-breath.mp3",
+        "sha256": "bb1a014fe1cf9dddfb1016c9dee115b71a81afc9a731698688151ff4e26e77ad",
+        "duration": 5.26,
+        "phraseId": "breath",
+        "fullUtterance": true
+      },
+      "going": {
+        "file": "amounts/USD-1p00-going.mp3",
+        "sha256": "65599efe08b070e49a72616c582994759d1647a3a4a2088e7a72cd94d48cff94",
+        "duration": 5.62,
+        "phraseId": "going",
+        "fullUtterance": true
+      },
+      "out": {
+        "file": "amounts/USD-1p00-out.mp3",
+        "sha256": "a4852733713e4b88f45b286221612e25542c2a9d5322301fc5f00bfb2987cdec",
+        "duration": 5.89,
+        "phraseId": "out",
+        "fullUtterance": true
+      },
+      "next-play": {
+        "file": "amounts/USD-1p00-next-play.mp3",
+        "sha256": "a8a5974564af768756c03f392696f26170d799b4e36d296ed3568664c747d75d",
+        "duration": 5.04,
+        "phraseId": "next-play",
+        "fullUtterance": true
+      },
+      "far-stop": {
+        "file": "amounts/USD-1p00-far-stop.mp3",
+        "sha256": "6846d5147598e3f6144a6239de83a05167e1a240dc02c4a78503e1d6c152676d",
+        "duration": 3.5,
+        "phraseId": "far-stop",
+        "fullUtterance": true
+      },
+      "showed": {
+        "file": "amounts/USD-1p00-showed.mp3",
+        "sha256": "e2909786ddd935c385c1e406a474f5ffca2f1afc1881467e04aa9e4febce816b",
+        "duration": 6.24,
+        "phraseId": "showed",
+        "fullUtterance": true
+      },
+      "worth": {
+        "file": "amounts/USD-1p00-worth.mp3",
+        "sha256": "ce49b03d93fc2731d6ce433c8ce079b7c3b98a7886f38bb49ac213fe0ca9aa71",
+        "duration": 4.05,
+        "phraseId": "worth",
+        "fullUtterance": true
+      },
+      "eyes": {
+        "file": "amounts/USD-1p00-eyes.mp3",
+        "sha256": "ff97ac8ad6db115e6ddd71cef7532d644a84f14a75bdadedba38829a55a7f30d",
+        "duration": 5.17,
+        "phraseId": "eyes",
+        "fullUtterance": true
+      },
+      "rep": {
+        "file": "amounts/USD-1p00-rep.mp3",
+        "sha256": "cedbc5ea878e64ed00f864145fa2cac0fdf97685ed6e3b1f8b01ef9c9d022923",
+        "duration": 5.68,
+        "phraseId": "rep",
+        "fullUtterance": true
+      },
+      "receipt": {
+        "file": "amounts/USD-1p00-receipt.mp3",
+        "sha256": "318f0b7f6d00052947227088727578b722d2009984ea6fc91336c4b120ead30f",
+        "duration": 5.3,
+        "phraseId": "receipt",
+        "fullUtterance": true
+      },
+      "shortcuts": {
+        "file": "amounts/USD-1p00-shortcuts.mp3",
+        "sha256": "11bfb1a98c87beed69883d845c444d0767324e588705a9d0ac37212040b38c20",
+        "duration": 4.56,
+        "phraseId": "shortcuts",
+        "fullUtterance": true
+      },
+      "mission": {
+        "file": "amounts/USD-1p00-mission.mp3",
+        "sha256": "f489dc36cfb8f1442a81580eeaa22289ebfb5a620ec973e2d7177fca85208ccf",
+        "duration": 4.5,
+        "phraseId": "mission",
+        "fullUtterance": true
+      },
+      "clock": {
+        "file": "amounts/USD-1p00-clock.mp3",
+        "sha256": "b0aa187a42d9bf2f90a69152a7e05ef7d3740a4ce3d0c13aeb77177ff5de2e69",
+        "duration": 4.63,
+        "phraseId": "clock",
+        "fullUtterance": true
+      }
     }
   },
   "wholeSamplesProcessed": {
-    "count": 200,
+    "count": 400,
+    "currencies": [
+      "CNY",
+      "USD"
+    ],
     "amounts": [
-      "0.01",
-      "0.02",
-      "0.03",
-      "0.05",
-      "0.08",
-      "0.10",
-      "0.20",
-      "0.30",
-      "0.50",
-      "1.00"
+      0.01,
+      0.02,
+      0.03,
+      0.05,
+      0.08,
+      0.1,
+      0.2,
+      0.3,
+      0.5,
+      1
     ],
     "processing": "One continuous take per phrase and amount; outer quiet trim with 50 ms padding; one constant gain to active RMS -24.8 dB with true peak ceiling -2.2 dB; MP3 96 kbps mono 24 kHz; no splicing, pitch, speed or phoneme edits."
   }

@@ -69,7 +69,8 @@ assert.equal(manifest.schemaVersion, 1)
 const tierRows = Object.values(manifest.tierOverrides ?? {}).flatMap(tier => Object.values(tier ?? {}))
 assert.ok(tierRows.length > 0, 'tier overrides must be served, not only the default set')
 const wholeRows = Object.values(manifest.wholeSamples ?? {}).flatMap(byPhrase => Object.values(byPhrase ?? {}))
-assert.equal(wholeRows.length, 200, 'every whole-sentence take must be served')
+assert.equal(wholeRows.length, 400, 'every whole-sentence take must be served')
+assert.deepEqual(Object.keys(manifest.wholeSamples).map(key => key.split(':')[0]).filter((value, index, all) => all.indexOf(value) === index).sort(), ['CNY', 'USD'], 'both currencies have whole-sentence takes')
 const declared = [...Object.values(manifest.clips), ...Object.values(manifest.amounts), ...tierRows, ...wholeRows]
 for (const clip of declared) {
   const route = routes.get(`/api/man-report/voices/${clip.file}`)

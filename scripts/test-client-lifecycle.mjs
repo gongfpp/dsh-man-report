@@ -258,6 +258,27 @@ for (let i = 0; i < 20; i++) {
   }
 }
 {
+  const pack = JSON.parse(readFileSync(new URL('../assets/voices/manifest.json', import.meta.url), 'utf8'))
+  if (pack.provider === 'doubao') {
+    const f = await fixture({ amount: .02, manifest: pack, deterministicRandom: () => .999999 })
+    await f.openSettings(); await f.setting('select', 'USD'); await f.event(2)
+    assert.equal(f.playing, 1, 'a covered USD amount plays one continuous take, never a splice')
+    assert.match(f.text(), /0.02美元/)
+    assert.ok(f.requests.some(url => url.endsWith('/amounts/USD-0p02-clock.mp3')), 'the USD whole take for that amount and template is requested')
+    await f.unmount()
+  }
+}
+{
+  const pack = JSON.parse(readFileSync(new URL('../assets/voices/manifest.json', import.meta.url), 'utf8'))
+  if (pack.provider === 'doubao') {
+    const f = await fixture({ amount: 1.27, manifest: pack })
+    await f.openSettings(); await f.setting('select', 'USD'); await f.event(2)
+    assert.ok(f.playing > 1, 'an uncovered USD amount keeps the spliced bank')
+    assert.ok(!f.requests.some(url => url.includes('/amounts/')), 'no nearby USD whole take may substitute for an uncovered amount')
+    await f.unmount()
+  }
+}
+{
   const pack = exactPilot(); pack.amounts['CNY:0.31'].fullUtterance = true
   pack.clips = {} // No static MAN or money fragments are needed by a full utterance.
   let rolls = 0

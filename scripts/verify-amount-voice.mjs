@@ -19,7 +19,8 @@ for(const row of [...Object.values(manifest.clips),...Object.values(manifest.amo
 assert.deepEqual(manifest.amounts,{},'the retired 0.31 whole sample is gone; wholeSamples covers the common amounts')
 // Whole-sentence takes: one continuous recording per phrase and amount, never shared.
 const wholeSamples = manifest.wholeSamples ?? {}
-assert.deepEqual(Object.keys(wholeSamples).sort(), ['CNY:0.01','CNY:0.02','CNY:0.03','CNY:0.05','CNY:0.08','CNY:0.1','CNY:0.2','CNY:0.3','CNY:0.5','CNY:1'].sort())
+const WHOLE_AMOUNTS=['0.01','0.02','0.03','0.05','0.08','0.1','0.2','0.3','0.5','1']
+assert.deepEqual(Object.keys(wholeSamples).sort(), ['CNY','USD'].flatMap(currency=>WHOLE_AMOUNTS.map(amount=>currency+':'+amount)).sort())
 for(const [key,byPhrase] of Object.entries(wholeSamples)){
   const phraseIds = manifest.phrases.map(p=>p.id).sort()
   assert.deepEqual(Object.keys(byPhrase).sort(),phraseIds,key+' must cover every template')
@@ -83,7 +84,7 @@ for(const p of manifest.phrases)for(const currency of ['CNY','USD'])for(const am
   assert.ok(!files.some(path=>path.includes('/amounts/')),'a different whole sentence must never replace a selected template')
   assert.equal(files.filter(path=>path.endsWith('/'+fileFor(unitKey,tier))).length,1)
 }
-assert.ok(wholeHits>=200,'whole takes must be reachable for the covered amounts: '+wholeHits)
+assert.ok(wholeHits>=400,'whole takes must be reachable for the covered amounts: '+wholeHits)
 assert.ok(spliceHits>0,'uncovered amounts must keep the spliced bank')
 assert.equal(manifest.tokenPhrases.length,4)
 for(const phrase of manifest.tokenPhrases)for(const amount of [0,1,999,1000,1234,9999,10000,999999999999]){
@@ -100,4 +101,4 @@ assert.deepEqual(Array.from(api.numberTokens(9.9995)),['10'])
 for(const path of ['../index.js','../client.js']){
  const text=readFileSync(new URL(path,import.meta.url),'utf8');for(const forbidden of ['openspeech.bytedance.com','voice/resolve','voice/configure','manReport_voice_prepare','豆包连接'])assert.equal(text.includes(forbidden),false)
 }
-console.log('offline audio: passed (65 hashed clips, 4 emotion tiers x 65 re-recorded clips, 200 whole-sentence takes across 10 amounts x 20 templates; captions and speech share two-decimal ceiling; no runtime provider/key/tool)')
+console.log('offline audio: passed (65 hashed clips, 4 emotion tiers x 65 re-recorded clips, 400 whole-sentence takes across 10 amounts x 20 templates x 2 currencies; captions and speech share two-decimal ceiling; no runtime provider/key/tool)')
